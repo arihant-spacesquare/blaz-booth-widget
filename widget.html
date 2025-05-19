@@ -1,24 +1,73 @@
-<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-<df-messenger
-  project-id="blaz-request-booth"
-  agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
-  language-code="en"
-  max-query-length="-1"
-  auto-start="true"> <df-messenger-chat-bubble
-    chat-title="blaz-booth-agent">
-  </df-messenger-chat-bubble>
-</df-messenger>
-<style>
-  df-messenger {
-    z-index: 999;
-    position: fixed;
-    --df-messenger-font-color: #000;
-    --df-messenger-font-family: Google Sans;
-    --df-messenger-chat-background: #f3f6fc;
-    --df-messenger-message-user-background: #d3e3fd;
-    --df-messenger-message-bot-background: #fff;
-    bottom: 16px;
-    right: 16px;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bläz Booth Request Widget</title>
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+    <style>
+      df-messenger {
+        z-index: 999;
+        position: fixed;
+        --df-messenger-font-color: #000;
+        --df-messenger-font-family: Google Sans;
+        --df-messenger-chat-background: #f3f6fc;
+        --df-messenger-message-user-background: #d3e3fd;
+        --df-messenger-message-bot-background: #fff;
+        bottom: 16px;
+        right: 16px;
+        cursor: pointer;
+        display: block;
+      }
+      df-messenger-chat-bubble {
+        cursor: pointer;
+        display: block;
+      }
+    </style>
+</head>
+<body>
+    <df-messenger
+        project-id="blaz-request-booth"
+        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
+        language-code="en"
+        max-query-length="-1"
+        id="df-messenger">
+        <df-messenger-chat-bubble
+            chat-title="blaz-booth-agent">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            const dfMessenger = document.getElementById('df-messenger');
+            if (dfMessenger) {
+                // Use a more robust event listener and check for element readiness
+                const waitForElement = setInterval(() => {
+                    if (dfMessenger.shadowRoot && dfMessenger.shadowRoot.querySelector('.df-messenger-wrapper')) {
+                        clearInterval(waitForElement); // Stop checking
+                        dfMessenger.addEventListener('click', function(event) {
+                            console.log('df-messenger clicked!');
+                            event.stopPropagation();
+                            dfMessenger.sendMessage('');
+                            dfMessenger.classList.add('initial-message-sent');
+                        });
+
+                         const chatBubble = document.querySelector('df-messenger-chat-bubble');
+                         if (chatBubble) {
+                            chatBubble.addEventListener('click', function(event) {
+                                console.log('df-messenger-chat-bubble clicked!');
+                                event.stopPropagation();
+                                dfMessenger.sendMessage('');
+                                dfMessenger.classList.add('initial-message-sent');
+                            });
+                         }
+                    }
+                }, 100); // Check every 100ms
+            } else {
+                console.error('df-messenger element not found');
+            }
+        });
+    </script>
+</body>
+</html>
