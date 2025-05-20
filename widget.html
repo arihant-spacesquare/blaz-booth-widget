@@ -6,66 +6,171 @@
     <title>Bläz Booth Request Widget</title>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <style>
-      df-messenger {
-        z-index: 999;
-        position: fixed;
-        --df-messenger-font-color: #000;
-        --df-messenger-font-family: Google Sans;
-        --df-messenger-chat-background: #f3f6fc;
-        --df-messenger-message-user-background: #d3e3fd;
-        --df-messenger-message-bot-background: #fff;
-        bottom: 16px;
-        right: 16px;
-        cursor: pointer;
-        display: block;
-      }
-      df-messenger-chat-bubble {
-        cursor: pointer;
-        display: block;
-      }
+        body {
+            font-family: 'Google Sans', sans-serif; /* A clean, modern font */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Ensures content takes full viewport height */
+            background-color: #f0f4f8; /* Light background for contrast */
+            color: #333;
+            flex-direction: column; /* Arrange items vertically */
+        }
+
+        /* Styling for the main content area */
+        .container {
+            text-align: center;
+            padding: 40px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            max-width: 600px;
+            margin-bottom: 20px; /* Space above the widget for the button */
+        }
+
+        h1 {
+            color: #1a73e8; /* Google Blue */
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        /* Button Styling - This is our new direct launch button */
+        .launch-button {
+            background-color: #1a73e8; /* Google Blue */
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none; /* In case it's an <a> tag */
+            display: inline-block; /* Allows padding and vertical alignment */
+            margin-top: 20px; /* Space below text */
+        }
+
+        .launch-button:hover {
+            background-color: #1565c0; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        .launch-button:active {
+            transform: translateY(0); /* Press effect */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Dialogflow Messenger Widget Styling */
+        df-messenger {
+            z-index: 999;
+            position: fixed; /* Stays in place when scrolling */
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: 'Google Sans', sans-serif;
+            --df-messenger-chat-background: #f3f6fc; /* Light background for chat window */
+            --df-messenger-message-user-background: #d3e3fd; /* User bubble blue */
+            --df-messenger-message-bot-background: #fff; /* Bot bubble white */
+            bottom: 16px;
+            right: 16px;
+            /* We'll hide the default bubble and rely on our custom button */
+            display: none; /* Hide the default df-messenger chat bubble initially */
+        }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Welcome to the Bläz Booth Booking Portal!</h1>
+        <p>
+            Ready to secure your perfect spot at an upcoming Bläz event? Our interactive **Bläz Booth Agent** is here to guide you through the process quickly and efficiently.
+        </p>
+        <p>
+            Simply click the button below to instantly launch our chat assistant. It will walk you through collecting all the necessary details for your booth request. Once submitted, a dedicated Bläz team member will be in touch to confirm everything personally!
+        </p>
+        <button id="requestBoothButton" class="launch-button">
+            Click to Request a Booth at a Bläz Event!
+        </button>
+    </div>
+
     <df-messenger
         project-id="blaz-request-booth"
         agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
         language-code="en"
         max-query-length="-1"
         id="df-messenger">
-        <df-messenger-chat-bubble
-            chat-title="blaz-booth-agent">
-        </df-messenger-chat-bubble>
+        <df-messenger-chat-bubble chat-title="Bläz Booth Agent"></df-messenger-chat-bubble>
     </df-messenger>
 
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
     <script>
         window.addEventListener('load', function() {
             const dfMessenger = document.getElementById('df-messenger');
-            if (dfMessenger) {
-                // Use a more robust event listener and check for element readiness
-                const waitForElement = setInterval(() => {
+            const requestBoothButton = document.getElementById('requestBoothButton');
+
+            if (dfMessenger && requestBoothButton) {
+                // Ensure the Dialogflow messenger is ready before interacting
+                const waitForDfMessengerReady = setInterval(() => {
+                    // Check if the internal shadow DOM elements are loaded
                     if (dfMessenger.shadowRoot && dfMessenger.shadowRoot.querySelector('.df-messenger-wrapper')) {
-                        clearInterval(waitForElement); // Stop checking
-                        dfMessenger.addEventListener('click', function(event) {
-                            console.log('df-messenger clicked!');
-                            event.stopPropagation();
+                        clearInterval(waitForDfMessengerReady); // Stop polling
+
+                        // Initially hide the default df-messenger bubble
+                        // We'll reveal the entire df-messenger component when our custom button is clicked
+                        dfMessenger.style.display = 'none';
+
+                        requestBoothButton.addEventListener('click', function() {
+                            console.log('Custom button clicked! Launching df-messenger.');
+
+                            // Show the df-messenger widget
+                            dfMessenger.style.display = 'block';
+
+                            // Open the chat window if it's not already open
+                            // This internal method usually toggles the chat window
+                            if (typeof dfMessenger.renderCustomText === 'function') {
+                                // For Dialogflow CX widgets, you might use .renderCustomText or similar
+                                // It's often enough to just show the widget and then open it programmatically
+                                dfMessenger.renderCustomText(); // Tries to open the chat window
+                            } else {
+                                // For older versions or if renderCustomText isn isn't available
+                                // You might need to directly interact with the shadow DOM for older versions
+                                // Or rely on sending a message to open it.
+                                dfMessenger.setAttribute('expand', 'true'); // Force expand the chat window
+                            }
+
+
+                            // Send an empty message to trigger the bot's welcome intent
+                            // This ensures the conversation starts immediately
                             dfMessenger.sendMessage('');
-                            dfMessenger.classList.add('initial-message-sent');
+
+                            // Remove the button or make it inactive after click if desired
+                            requestBoothButton.style.display = 'none'; // Hide the button after it's clicked
+                            // Or, you could disable it: requestBoothButton.disabled = true;
                         });
 
-                         const chatBubble = document.querySelector('df-messenger-chat-bubble');
-                         if (chatBubble) {
-                            chatBubble.addEventListener('click', function(event) {
-                                console.log('df-messenger-chat-bubble clicked!');
-                                event.stopPropagation();
-                                dfMessenger.sendMessage('');
-                                dfMessenger.classList.add('initial-message-sent');
-                            });
-                         }
+                        // Optionally, if the user closes the chat, you might want to show the button again
+                        dfMessenger.addEventListener('df-messenger-loaded', () => {
+                             // This event fires when the messenger itself has loaded, not necessarily ready for interaction
+                             // The waitForDfMessengerReady handles readiness.
+                        });
+
+                        dfMessenger.addEventListener('df-messenger-close', () => {
+                            console.log('df-messenger closed.');
+                            requestBoothButton.style.display = 'inline-block'; // Show button again
+                        });
+
                     }
-                }, 100); // Check every 100ms
+                }, 100); // Check every 100ms for df-messenger to be fully loaded
             } else {
-                console.error('df-messenger element not found');
+                console.error('df-messenger or requestBoothButton element not found');
             }
         });
     </script>
