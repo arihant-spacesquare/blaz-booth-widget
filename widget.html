@@ -70,7 +70,7 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
 
-        /* Dialogflow Messenger Widget Styling */
+        /* Dialogflow Messenger Widget Styling - Reverted for visibility */
         df-messenger {
             z-index: 999;
             position: fixed; /* Stays in place when scrolling */
@@ -81,8 +81,8 @@
             --df-messenger-message-bot-background: #fff; /* Bot bubble white */
             bottom: 16px;
             right: 16px;
-            /* We'll hide the default bubble and rely on our custom button */
-            display: none; /* Hide the default df-messenger chat bubble initially */
+            /* IMPORTANT: We are NOT setting display: none; here anymore.
+               The widget should be visible by default as intended by Dialogflow Messenger. */
         }
     </style>
 </head>
@@ -120,48 +120,28 @@
                 // Ensure the Dialogflow messenger is ready before interacting
                 const waitForDfMessengerReady = setInterval(() => {
                     // Check if the internal shadow DOM elements are loaded
-                    if (dfMessenger.shadowRoot && dfMessenger.shadowRoot.querySelector('.df-messenger-wrapper')) {
+                    // We specifically look for the chat bubble within the shadow DOM to ensure it's ready.
+                    const chatBubbleInShadow = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
+
+                    if (chatBubbleInShadow) {
                         clearInterval(waitForDfMessengerReady); // Stop polling
 
-                        // Initially hide the default df-messenger bubble
-                        // We'll reveal the entire df-messenger component when our custom button is clicked
-                        dfMessenger.style.display = 'none';
-
+                        // Attach click listener to our custom button
                         requestBoothButton.addEventListener('click', function() {
-                            console.log('Custom button clicked! Launching df-messenger.');
+                            console.log('Custom button clicked! Opening df-messenger and sending initial message.');
 
-                            // Show the df-messenger widget
-                            dfMessenger.style.display = 'block';
-
-                            // Open the chat window if it's not already open
-                            // This internal method usually toggles the chat window
-                            if (typeof dfMessenger.renderCustomText === 'function') {
-                                // For Dialogflow CX widgets, you might use .renderCustomText or similar
-                                // It's often enough to just show the widget and then open it programmatically
-                                dfMessenger.renderCustomText(); // Tries to open the chat window
-                            } else {
-                                // For older versions or if renderCustomText isn isn't available
-                                // You might need to directly interact with the shadow DOM for older versions
-                                // Or rely on sending a message to open it.
-                                dfMessenger.setAttribute('expand', 'true'); // Force expand the chat window
-                            }
-
+                            // Force the chat window to expand
+                            dfMessenger.setAttribute('expand', 'true');
 
                             // Send an empty message to trigger the bot's welcome intent
-                            // This ensures the conversation starts immediately
+                            // This also implicitly opens the chat if not already open
                             dfMessenger.sendMessage('');
 
-                            // Remove the button or make it inactive after click if desired
-                            requestBoothButton.style.display = 'none'; // Hide the button after it's clicked
-                            // Or, you could disable it: requestBoothButton.disabled = true;
+                            // Hide the custom button after it's clicked and the chat is opened
+                            requestBoothButton.style.display = 'none';
                         });
 
-                        // Optionally, if the user closes the chat, you might want to show the button again
-                        dfMessenger.addEventListener('df-messenger-loaded', () => {
-                             // This event fires when the messenger itself has loaded, not necessarily ready for interaction
-                             // The waitForDfMessengerReady handles readiness.
-                        });
-
+                        // Add listener to show the button again if the df-messenger is closed
                         dfMessenger.addEventListener('df-messenger-close', () => {
                             console.log('df-messenger closed.');
                             requestBoothButton.style.display = 'inline-block'; // Show button again
