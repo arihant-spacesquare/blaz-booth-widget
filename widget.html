@@ -162,19 +162,109 @@
             margin-top: 15px;
         }
 
-        /* Dialogflow Messenger Widget Styling from your provided code */
+        /* Dialogflow Messenger Widget Styling */
         df-messenger {
             z-index: 999;
             position: fixed;
             --df-messenger-font-color: #000;
-            --df-messenger-font-family: Google Sans; /* Used your provided font-family here */
+            --df-messenger-font-family: Google Sans;
             --df-messenger-chat-background: #f3f6fc;
             --df-messenger-message-user-background: #d3e3fd;
             --df-messenger-message-bot-background: #fff;
-            bottom: 16px; /* Adjusted to match image_898188.png spacing */
-            right: 16px; /* Adjusted to match image_898188.png spacing */
+            bottom: 16px;
+            right: 16px;
         }
-        /* No specific styling to hide the default button, so it will appear as normal */
+
+        /* Guide box styling (re-added) */
+        .widget-guide {
+            position: fixed;
+            bottom: 100px; /* Position above the widget */
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7); /* Darker, slightly transparent background */
+            color: #ffffff;
+            padding: 15px 20px;
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            max-width: 220px;
+            text-align: center;
+            font-size: 0.9em;
+            line-height: 1.4;
+            z-index: 998; /* Below the widget, above content */
+            transition: opacity 0.3s ease-in-out;
+            opacity: 1; /* Initially visible */
+            pointer-events: none; /* Allows clicks to pass through to elements below */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-50%) translateY(-50%); /* Adjust to center point of message box */
+            right: 50px; /* Align to the right */
+            bottom: 120px; /* Adjust vertical position */
+            transform: translateX(0); /* Remove center adjustment for a fixed right position */
+            left: unset;
+        }
+
+        .widget-guide-text {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .widget-guide-highlight {
+            font-weight: bold;
+            color: #8B5CF6; /* A distinct highlight color, e.g., purple */
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* Speech bubble tail for the guide box */
+        .widget-guide::after {
+            content: '';
+            position: absolute;
+            bottom: -15px; /* Position below the box */
+            right: 25px; /* Aligned with the widget */
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 15px solid rgba(0, 0, 0, 0.7); /* Match guide box background */
+            z-index: 998;
+        }
+
+        /* Chat pointer arrow (re-added) */
+        .chat-pointer-arrow {
+            position: fixed;
+            bottom: 60px; /* Adjust to point to the widget */
+            right: 60px; /* Adjust to point to the widget */
+            height: 40px;
+            width: 40px;
+            z-index: 998; /* Below the widget */
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+            animation: bounceArrow 1.5s infinite; /* Add a subtle bounce animation */
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        .chat-pointer-arrow svg {
+            width: 100%;
+            height: 100%;
+            stroke: #8B5CF6; /* Purple color for the arrow */
+            stroke-width: 3;
+            fill: none;
+        }
+
+        @keyframes bounceArrow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Hide guide and arrow when the df-messenger is open */
+        df-messenger[opened] ~ .widget-guide,
+        df-messenger[opened] ~ .chat-pointer-arrow {
+            opacity: 0;
+            pointer-events: none; /* Disable interaction when hidden */
+        }
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 </head>
@@ -208,6 +298,18 @@
         <p class="tagline-bottom">The ultimate nightlife experience awaits you</p>
     </div>
 
+    <div class="widget-guide" id="widgetGuide">
+        <span class="widget-guide-highlight">CLICK HERE</span>
+        <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
+    </div>
+
+    <div class="chat-pointer-arrow" id="chatPointerArrow">
+        <svg viewBox="0 0 64 64">
+            <path d="M22 42L42 22" />
+            <path d="M24 22H42V40" />
+        </svg>
+    </div>
+
     <df-messenger
         project-id="blaz-request-booth"
         agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
@@ -220,5 +322,37 @@
 
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     
-    </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dfMessenger = document.querySelector('df-messenger');
+            const widgetGuide = document.getElementById('widgetGuide');
+            const chatPointerArrow = document.getElementById('chatPointerArrow');
+
+            // Function to show/hide the guide and arrow
+            function toggleGuideAndArrow() {
+                // dfMessenger.opened is a property that indicates if the chat window is open
+                if (dfMessenger.opened) {
+                    widgetGuide.style.opacity = '0';
+                    widgetGuide.style.pointerEvents = 'none'; // Disable clicks
+                    chatPointerArrow.style.opacity = '0';
+                    chatPointerArrow.style.pointerEvents = 'none'; // Disable clicks
+                } else {
+                    widgetGuide.style.opacity = '1';
+                    widgetGuide.style.pointerEvents = 'auto'; // Enable clicks
+                    chatPointerArrow.style.opacity = '1';
+                    chatPointerArrow.style.pointerEvents = 'auto'; // Enable clicks
+                }
+            }
+
+            // Initial check on load
+            toggleGuideAndArrow();
+
+            // Listen for when the df-messenger opens or closes
+            dfMessenger.addEventListener('df-messenger-loaded', function () {
+                dfMessenger.addEventListener('df-messenger-opened', toggleGuideAndArrow);
+                dfMessenger.addEventListener('df-messenger-closed', toggleGuideAndArrow);
+            });
+        });
+    </script>
+</body>
 </html>
