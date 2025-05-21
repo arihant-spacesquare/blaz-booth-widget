@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif; /* General body text */
@@ -17,57 +17,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #1a1a1a; /* Dark background from Bläz site */
+            background-color: #1a1a1a; /* Dark background from Bläz site image_872505.jpg */
             color: #ffffff; /* White text for contrast */
-            flex-direction: column;
             overflow: hidden; /* Prevent scrollbars from animations/floating elements */
         }
 
-        /* Main content container, mimicking the Bläz site's text box */
-        .blaz-content-box {
-            text-align: center;
-            padding: 40px;
-            background-color: rgba(0, 0, 0, 0.7); /* Slightly transparent dark box */
-            border-radius: 8px; /* Subtle rounding */
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5); /* Deeper shadow */
-            max-width: 700px; /* Wider for more impact */
-            margin: 20px; /* Some margin just in case */
-            z-index: 1; /* Ensure it's above the background */
-            position: relative; /* For text highlighting effects if needed */
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif; /* Elegant, larger font for main title */
-            font-weight: 700; /* Bold Playfair Display */
-            font-size: 3em; /* Larger title */
-            color: #ffffff; /* White title */
-            margin-bottom: 20px;
-            letter-spacing: 0.05em; /* Slight letter spacing for elegance */
-        }
-
-        .tagline {
-            font-family: 'Montserrat', sans-serif; /* Secondary font for clarity */
-            font-weight: 300; /* Lighter weight for subtle contrast */
-            font-size: 1.2em; /* Good reading size */
-            line-height: 1.6;
-            margin-bottom: 30px;
-            color: rgba(255, 255, 255, 0.8); /* Slightly dimmed white */
-        }
-
-        .instruction-text {
-            font-family: 'Montserrat', sans-serif; /* Consistent with tagline */
-            font-weight: 500; /* Medium weight for emphasis */
-            font-size: 1.1em;
-            color: #ffffff; /* Clear white */
-            margin-top: 30px; /* Space from description */
-            text-transform: uppercase; /* Subtle emphasis */
-            letter-spacing: 0.08em;
-            padding: 5px 0;
-            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Subtle separator */
-            padding-top: 20px;
-        }
-
-        /* Dialogflow Messenger Widget Styling (your original config, just positioned) */
+        /* Dialogflow Messenger Widget Styling (your original config, with subtle Bläz aesthetic tweaks) */
         df-messenger {
             z-index: 999; /* Always on top */
             position: fixed;
@@ -79,57 +34,60 @@
             bottom: 30px; /* Slightly raised from bottom */
             right: 30px; /* Slightly in from right */
             cursor: pointer; /* Explicitly show it's clickable */
+            /* Add some box-shadow to the bubble itself for more pop, matching Bläz style */
+            --df-messenger-chat-bubble-shadow: 0 4px 15px rgba(0, 0, 0, 0.6); /* More prominent shadow */
+            border-radius: 50%; /* Ensure it's a perfect circle */
         }
 
-        /* NEW: Floating instruction near the widget */
-        .widget-guide {
+        /* NEW: Prominent instruction text positioned beside the widget */
+        .widget-instruction {
             position: fixed;
-            bottom: 120px; /* Position above the widget */
-            right: 40px;
-            background-color: #ffffff; /* White background for visibility */
-            color: #1a1a1a; /* Dark text */
-            padding: 8px 12px;
-            border-radius: 6px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            font-size: 0.85em;
+            bottom: 40px; /* Aligned with the widget's bottom */
+            right: 120px; /* Positioned to the left of the widget */
+            max-width: 280px; /* Wider for more words on fewer lines */
+            text-align: right; /* Text aligns to the right, pointing to the widget */
+            color: #ffffff; /* White text for readability */
             font-family: 'Montserrat', sans-serif;
-            font-weight: 500;
-            text-align: center;
-            z-index: 998; /* Below messenger, above content */
+            font-weight: 700; /* Bolder for impact */
+            font-size: 1.2em; /* Larger reading size */
+            line-height: 1.4;
+            letter-spacing: 0.03em; /* Slight spacing for elegance */
+            z-index: 998; /* Below messenger, above body content */
             pointer-events: none; /* Crucial: Allows clicks to pass through to the widget below */
             opacity: 0; /* Start hidden */
-            transform: translateY(20px); /* Start slightly below */
-            animation: fadeInGuide 1s ease-out forwards 2s; /* Fade in after a delay */
+            transform: translateX(30px); /* Start slightly to the right for animation */
+            animation: slideInText 1s ease-out forwards 1.5s; /* Slide in animation after a delay */
         }
 
-        /* Arrow for the widget guide */
-        .widget-guide::after {
+        /* The arrow/line visual cue */
+        .widget-instruction::after {
             content: '';
             position: absolute;
-            bottom: -8px; /* Position below the bubble */
-            right: 20px; /* Align with the widget */
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid #ffffff; /* Same color as bubble */
+            bottom: 10px; /* Aligned with the text */
+            right: -5px; /* Starts just outside the text box */
+            width: 80px; /* Length of the line */
+            height: 2px;
+            background: linear-gradient(to right, transparent, #ffffff); /* Fade from transparent to white */
+            transform: rotate(30deg); /* Angle the line towards the widget */
+            transform-origin: right bottom; /* Rotate from the bottom right of the line */
         }
 
-        /* Animation for the guide text */
-        @keyframes fadeInGuide {
-            to { opacity: 1; transform: translateY(0); }
+        /* Animation for the instruction text to slide in */
+        @keyframes slideInText {
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        /* Optional: Subtle pulse on the chat bubble itself to draw attention */
+        /* Pulse animation for the chat bubble itself to draw attention */
         @keyframes pulseChatBubble {
             0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(255, 255, 255, 0); }
+            50% { transform: scale(1.08); box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); } /* Slightly larger pulse */
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
         }
 
         /* Apply pulse to the chat bubble part directly */
         df-messenger[data-ready="true"]::part(df-messenger-button) {
-            animation: pulseChatBubble 2s infinite;
+            animation: pulseChatBubble 2s infinite; /* Continuous pulse */
+            background-color: #1a73e8; /* Ensure the bubble has a visible background */
         }
 
         /* Style for the logo - assuming you'd place this from image_872505.jpg */
@@ -141,28 +99,15 @@
             z-index: 1000;
             filter: invert(100%); /* If logo is black, make it white for dark background */
         }
-
     </style>
 </head>
 <body>
-    <div class="blaz-content-box">
-        <h1>Bläz Booth Booking Portal</h1>
-        <p class="tagline">
-            Your Gateway to Unforgettable Event Experiences.
-        </p>
-        <p class="instruction-text">
-            To begin your booth request,
-            <br>
-            kindly click the chat icon
-            <br>
-            <span style="font-family: 'Playfair Display', serif; font-size: 1.3em; font-weight: 700; color: #ffeb3b;">BELOW & TO THE RIGHT</span>
-            <br>
-            and our Bläz Agent will guide you.
-        </p>
-    </div>
-
-    <div class="widget-guide" id="widgetGuide">
-        Click here to chat!
+    <div class="widget-instruction" id="widgetInstruction">
+        **CLICK HERE** to chat with our
+        <br>
+        Bläz Booth Agent
+        <br>
+        and request your event space!
     </div>
 
     <df-messenger
@@ -179,36 +124,30 @@
     <script>
         window.addEventListener('load', function() {
             const dfMessenger = document.getElementById('df-messenger');
-            const widgetGuide = document.getElementById('widgetGuide');
+            const widgetInstruction = document.getElementById('widgetInstruction');
 
             if (dfMessenger) {
                 const waitForDfMessengerReady = setInterval(() => {
                     // Check for the internal shadow DOM element that signifies readiness
-                    const chatButton = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-button');
-                    // Older versions might use df-messenger-chat-bubble, but df-messenger-chat-button is more robust.
+                    const chatButton = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-button') || dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
 
-                    if (chatButton) { // If the chat button element exists within the shadow DOM
+                    if (chatButton) {
                         clearInterval(waitForDfMessengerReady); // Stop checking
 
                         // Set the data-ready attribute to trigger the CSS pulse animation
                         dfMessenger.setAttribute('data-ready', 'true');
 
-                        // Optionally send an initial message when the widget is first loaded,
-                        // if you want it to pop open immediately on page load.
-                        // dfMessenger.setAttribute('expand', 'true');
-                        // dfMessenger.sendMessage('');
-
-                        // Hide the instruction bubble when the chat is opened
+                        // Hide the instruction text when the chat is opened
                         dfMessenger.addEventListener('df-messenger-opened', () => {
-                            widgetGuide.style.opacity = '0';
-                            widgetGuide.style.pointerEvents = 'none'; // Make sure it's not interactive
+                            widgetInstruction.style.opacity = '0';
+                            widgetInstruction.style.pointerEvents = 'none'; // Ensure it's not interactive
                         });
 
-                        // Show the instruction bubble again if the chat is closed
+                        // Show the instruction text again if the chat is closed
                         dfMessenger.addEventListener('df-messenger-close', () => {
-                            widgetGuide.style.opacity = '1';
-                            widgetGuide.style.pointerEvents = 'auto'; // Make it interactive again
-                            widgetGuide.style.animation = 'fadeInGuide 1s ease-out forwards'; // Re-animate
+                            widgetInstruction.style.opacity = '1';
+                            widgetInstruction.style.pointerEvents = 'auto'; // Make it interactive again
+                            widgetInstruction.style.animation = 'slideInText 1s ease-out forwards'; // Re-animate
                         });
                     }
                 }, 100); // Check every 100ms
