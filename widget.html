@@ -178,8 +178,8 @@
         /* Guide box styling (re-added and adjusted) */
         .widget-guide {
             position: fixed;
-            bottom: 95px; /* Adjusted to be slightly higher, close to the arrow's origin */
-            right: 15px; /* Adjusted to align with the widget and arrow */
+            bottom: 110px; /* Adjusted to be above the widget icon */
+            right: 15px; /* Aligned with the widget on the right */
             background-color: rgba(0, 0, 0, 0.7); /* Darker, slightly transparent background */
             color: #ffffff;
             padding: 15px 20px;
@@ -197,6 +197,14 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            border: 2px solid transparent; /* For the glow effect */
+            animation: pulseBorderGlow 2s infinite alternate; /* Pulsing border glow */
+        }
+
+        /* Animation for pulsing border glow */
+        @keyframes pulseBorderGlow {
+            0% { border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 10px rgba(139, 92, 246, 0.6); }
+            100% { border-color: rgba(139, 92, 246, 0.8); box-shadow: 0 0 20px rgba(139, 92, 246, 1); }
         }
 
         .widget-guide-text {
@@ -213,52 +221,25 @@
             display: block;
         }
 
-        /* Speech bubble tail for the guide box */
-        .widget-guide::after {
-            content: '';
-            position: absolute;
-            bottom: -15px; /* Position below the box */
-            right: 50px; /* Adjusted for better alignment with the arrow */
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 15px solid rgba(0, 0, 0, 0.7); /* Match guide box background */
-            z-index: 998;
-        }
-
-        /* Chat pointer arrow (adjusted) */
-        .chat-pointer-arrow {
-            position: fixed;
-            bottom: 45px; /* Adjusted to point directly to the chat icon */
-            right: 48px; /* Adjusted to align horizontally with the chat icon */
-            height: 40px;
-            width: 40px;
-            z-index: 998; /* Below the widget */
-            opacity: 1;
-            transition: opacity 0.3s ease-in-out;
-            animation: bounceArrow 1.5s infinite; /* Add a subtle bounce animation */
-            pointer-events: none; /* Allows clicks to pass through */
-        }
-
-        .chat-pointer-arrow svg {
-            width: 100%;
-            height: 100%;
-            stroke: #8B5CF6; /* Purple color for the arrow */
-            stroke-width: 3;
+        /* Icon within the guide box */
+        .widget-guide-icon {
+            width: 30px;
+            height: 30px;
+            margin-bottom: 10px;
+            stroke: #8B5CF6; /* Purple color for the icon */
+            stroke-width: 2;
             fill: none;
-            /* Rotate the arrow to point downwards */
-            transform: rotate(0deg); /* Changed from -90deg to 0deg for downward */
+            animation: pulseIconGlow 2s infinite alternate; /* Pulsing icon glow */
         }
 
-        @keyframes bounceArrow {
-            0%, 100% { transform: translateY(0) rotate(0deg); } /* Keep rotation consistent */
-            50% { transform: translateY(-10px) rotate(0deg); }
+        /* Animation for pulsing icon glow */
+        @keyframes pulseIconGlow {
+            0% { stroke-opacity: 0.6; transform: scale(1); }
+            100% { stroke-opacity: 1; transform: scale(1.1); }
         }
 
-        /* Hide guide and arrow when the df-messenger is open */
-        df-messenger[opened] ~ .widget-guide,
-        df-messenger[opened] ~ .chat-pointer-arrow {
+        /* Hide guide when the df-messenger is open */
+        df-messenger[opened] ~ .widget-guide {
             opacity: 0;
             pointer-events: none; /* Disable interaction when hidden */
         }
@@ -296,14 +277,11 @@
     </div>
 
     <div class="widget-guide" id="widgetGuide">
+        <svg class="widget-guide-icon" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
         <span class="widget-guide-highlight">CLICK BELOW</span>
         <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
-    </div>
-
-    <div class="chat-pointer-arrow" id="chatPointerArrow">
-        <svg viewBox="0 0 64 64">
-            <path d="M32 0 L64 32 L48 32 L48 64 L16 64 L16 32 L0 32 Z" />
-        </svg>
     </div>
 
     <df-messenger
@@ -322,31 +300,26 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dfMessenger = document.querySelector('df-messenger');
             const widgetGuide = document.getElementById('widgetGuide');
-            const chatPointerArrow = document.getElementById('chatPointerArrow');
 
-            // Function to show/hide the guide and arrow
-            function toggleGuideAndArrow() {
+            // Function to show/hide the guide
+            function toggleGuide() {
                 // dfMessenger.opened is a property that indicates if the chat window is open
                 if (dfMessenger.opened) {
                     widgetGuide.style.opacity = '0';
                     widgetGuide.style.pointerEvents = 'none'; // Disable clicks
-                    chatPointerArrow.style.opacity = '0';
-                    chatPointerArrow.style.pointerEvents = 'none'; // Disable clicks
                 } else {
                     widgetGuide.style.opacity = '1';
                     widgetGuide.style.pointerEvents = 'auto'; // Enable clicks
-                    chatPointerArrow.style.opacity = '1';
-                    chatPointerArrow.style.pointerEvents = 'auto'; // Enable clicks
                 }
             }
 
             // Initial check on load
-            toggleGuideAndArrow();
+            toggleGuide();
 
             // Listen for when the df-messenger opens or closes
             dfMessenger.addEventListener('df-messenger-loaded', function () {
-                dfMessenger.addEventListener('df-messenger-opened', toggleGuideAndArrow);
-                dfMessenger.addEventListener('df-messenger-closed', toggleGuideAndArrow);
+                dfMessenger.addEventListener('df-messenger-opened', toggleGuide);
+                dfMessenger.addEventListener('df-messenger-closed', toggleGuide);
             });
         });
     </script>
