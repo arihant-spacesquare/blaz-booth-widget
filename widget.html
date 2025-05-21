@@ -18,7 +18,7 @@
             min-height: 100vh;
             background-color: #0a0a0e; /* Dark background from image_896ec3.png */
             color: #ffffff;
-            overflow: hidden;
+            overflow: hidden; /* Prevent scrollbars unless absolutely necessary */
             position: relative; /* For absolute positioning of background elements */
         }
 
@@ -77,6 +77,7 @@
             margin: 20px;
             z-index: 10; /* Ensure it's above background effects */
             backdrop-filter: blur(10px); /* Frosted glass effect */
+            width: calc(100% - 40px); /* Make it responsive on smaller screens */
         }
 
         .blaz-logo-container {
@@ -242,6 +243,93 @@
         df-messenger[opened] ~ .widget-guide {
             opacity: 0;
             pointer-events: none; /* Disable interaction when hidden */
+        }
+
+        /* ******************************************* */
+        /* RESPONSIVE DESIGN - MEDIA QUERIES FOR MOBILE */
+        /* ******************************************* */
+
+        @media (max-width: 768px) { /* Styles for screens up to 768px wide (typical tablet portrait and smaller) */
+            .blaz-content-box {
+                padding: 20px; /* Reduce padding on smaller screens */
+                margin: 10px; /* Reduce margin */
+            }
+
+            h1 {
+                font-size: 1.8em; /* Smaller font size for headings */
+            }
+
+            p {
+                font-size: 0.9em; /* Smaller font size for paragraphs */
+            }
+
+            .blaz-logo-circle {
+                height: 60px; /* Smaller logo */
+                width: 60px;
+            }
+
+            .blaz-icon {
+                height: 40px; /* Smaller logo icon */
+                width: 40px;
+            }
+
+            /* Adjust widget guide for mobile */
+            .widget-guide {
+                bottom: 80px; /* Adjust vertical position for mobile */
+                right: 10px; /* Adjust horizontal position for mobile */
+                max-width: 180px; /* Make the guide box narrower */
+                padding: 10px 15px; /* Reduce padding */
+                font-size: 0.8em; /* Smaller font size for guide text */
+                border-radius: 8px; /* Slightly less rounded corners */
+            }
+
+            .widget-guide-highlight {
+                font-size: 1em; /* Keep highlight readable */
+                margin-bottom: 3px;
+            }
+
+            .widget-guide-icon {
+                width: 25px; /* Smaller icon in guide */
+                height: 25px;
+                margin-bottom: 5px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Styles for very small screens (most smartphones) */
+            body {
+                /* Potentially add overflow-y: auto if content might exceed viewport height on small screens */
+                /* overflow-y: auto; */
+            }
+
+            .blaz-content-box {
+                padding: 15px;
+                margin: 5px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            p {
+                font-size: 0.85em;
+            }
+
+            .widget-guide {
+                bottom: 70px; /* Further adjust for very small screens */
+                right: 5px; /* Closer to the edge */
+                max-width: 160px; /* Even narrower */
+                padding: 8px 12px;
+                font-size: 0.75em;
+            }
+
+            .widget-guide-highlight {
+                font-size: 0.9em;
+            }
+
+            .widget-guide-icon {
+                width: 20px;
+                height: 20px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
