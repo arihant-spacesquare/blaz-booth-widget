@@ -185,10 +185,10 @@
             right: 15px;  /* Default for desktop */
             background-color: rgba(0, 0, 0, 0.7);
             color: #ffffff;
-            padding: 15px 20px;
+            padding: 10px 15px; /* Adjusted padding for no "CLICK BELOW" text */
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            max-width: 220px; /* Default for desktop */
+            max-width: 200px; /* Adjusted max-width */
             text-align: center;
             font-size: 0.9em;
             line-height: 1.4;
@@ -210,24 +210,20 @@
         }
 
         .widget-guide-text {
-            margin: 0; /* Reset margins */
+            margin: 0;
             color: rgba(255, 255, 255, 0.9);
             font-weight: 300;
         }
 
-        /* This rule now only exists for desktop via JS, no need for display:none here */
+        /* This rule is now effectively for an element that doesn't exist, but leaving it won't hurt */
         .widget-guide-highlight {
-            font-weight: bold;
-            color: #8B5CF6;
-            font-size: 1.1em;
-            margin-bottom: 5px;
-            display: block; /* Ensure it behaves as a block element */
+            display: none; /* Ensure it's never visible if somehow re-added */
         }
 
         .widget-guide-icon {
-            width: 30px;
-            height: 30px;
-            margin-bottom: 10px; /* Default for desktop */
+            width: 28px; /* Slightly smaller icon */
+            height: 28px; /* Slightly smaller icon */
+            margin-bottom: 5px; /* Reduced margin to bring text closer */
             stroke: #8B5CF6;
             stroke-width: 2;
             fill: none;
@@ -246,7 +242,7 @@
         }
 
         /* ******************************************* */
-        /* RESPONSIVE DESIGN - MEDIA QUERIES FOR MOBILE */
+        /* RESPONSIVE DESIGN - MEDIA QUERIES (simplified for mobile) */
         /* ******************************************* */
 
         @media (max-width: 768px) { /* Tablets and smaller */
@@ -276,17 +272,17 @@
 
             /* Adjust widget guide for tablets/smaller desktops */
             .widget-guide {
-                bottom: 90px;
+                bottom: 85px; /* Adjust vertical position for tablets */
                 right: 10px;
-                max-width: 200px;
-                padding: 12px 18px;
-                font-size: 0.85em;
+                max-width: 180px; /* Make it a bit narrower */
+                padding: 8px 12px; /* Reduce padding */
+                font-size: 0.8em;
             }
-            /* The highlight element will be added via JS on desktop, so no need to hide here */
-            /* .widget-guide-highlight { font-size: 1.05em; } */ 
+
             .widget-guide-icon {
-                width: 28px;
-                height: 28px;
+                width: 26px;
+                height: 26px;
+                margin-bottom: 4px;
             }
         }
 
@@ -323,27 +319,22 @@
                 font-size: 1em;
             }
 
-            /* Adjust widget guide for smartphones now that "CLICK BELOW" is not in HTML */
+            /* Adjust widget guide for smartphones */
             .widget-guide {
                 left: 50%;
-                transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position */
-                right: auto;
-                bottom: 70px; /* Fine-tune vertical position */
-                max-width: 150px; /* Make it even narrower */
-                padding: 8px 10px; /* Reduced vertical and horizontal padding */
-                font-size: 0.7em; /* Even smaller font for remaining text */
-                border-radius: 8px;
+                transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position to right of center */
+                right: auto; /* Override fixed right */
+                bottom: 65px; /* Adjust vertical position */
+                max-width: 140px; /* Make it quite compact */
+                padding: 6px 8px; /* Further reduced padding */
+                font-size: 0.7em;
+                border-radius: 6px;
             }
             
-            /* Adjust margin for icon now that highlight text is completely absent */
             .widget-guide-icon {
-                margin-bottom: 5px; /* Add a small margin to separate icon from text */
-                width: 22px;
-                height: 22px;
-            }
-            
-            .widget-guide-text {
-                margin-top: 0; /* Ensure no extra top margin from previous rules */
+                margin-bottom: 3px; /* Minimal margin */
+                width: 20px;
+                height: 20px;
             }
 
             /* Adjust df-messenger positioning for very small screens if needed */
@@ -408,39 +399,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dfMessenger = document.querySelector('df-messenger');
             const widgetGuide = document.getElementById('widgetGuide');
-            const mobileBreakpoint = 480; // Define your mobile breakpoint (same as in CSS)
-
-            // Function to add/remove "CLICK BELOW" based on screen size
-            function manageClickBelowText() {
-                const existingHighlight = widgetGuide.querySelector('.widget-guide-highlight');
-
-                if (window.innerWidth > mobileBreakpoint) {
-                    // Desktop size: Add "CLICK BELOW" if not already present
-                    if (!existingHighlight) {
-                        const highlightSpan = document.createElement('span');
-                        highlightSpan.classList.add('widget-guide-highlight');
-                        highlightSpan.textContent = 'CLICK BELOW';
-                        // Insert it right after the icon
-                        widgetGuide.insertBefore(highlightSpan, widgetGuide.querySelector('.widget-guide-text'));
-                        
-                        // Adjust margin for icon when highlight is present
-                        const icon = widgetGuide.querySelector('.widget-guide-icon');
-                        if (icon) {
-                            icon.style.marginBottom = '10px'; // Desktop margin
-                        }
-                    }
-                } else {
-                    // Mobile size: Remove "CLICK BELOW" if present
-                    if (existingHighlight) {
-                        existingHighlight.remove();
-                        // Reset margin for icon when highlight is removed
-                        const icon = widgetGuide.querySelector('.widget-guide-icon');
-                        if (icon) {
-                            icon.style.marginBottom = '5px'; // Mobile margin
-                        }
-                    }
-                }
-            }
 
             // Function to show/hide the guide based on messenger state
             function toggleGuide() {
@@ -454,15 +412,7 @@
             }
 
             // Initial calls on load
-            manageClickBelowText(); // Set text initially based on screen size
             toggleGuide();
-
-            // Listen for window resize to re-evaluate "CLICK BELOW" text
-            let resizeTimeout;
-            window.addEventListener('resize', () => {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(manageClickBelowText, 100); // Debounce resize
-            });
 
             // Listen for when the df-messenger opens or closes
             dfMessenger.addEventListener('df-messenger-loaded', function () {
