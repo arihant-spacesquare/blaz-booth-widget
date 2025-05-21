@@ -178,8 +178,8 @@
         /* Guide box styling (re-added and adjusted) */
         .widget-guide {
             position: fixed;
-            bottom: 100px; /* Position above the widget */
-            right: 20px; /* Position to the right */
+            bottom: 95px; /* Adjusted to be slightly higher, close to the arrow's origin */
+            right: 15px; /* Adjusted to align with the widget and arrow */
             background-color: rgba(0, 0, 0, 0.7); /* Darker, slightly transparent background */
             color: #ffffff;
             padding: 15px 20px;
@@ -218,7 +218,7 @@
             content: '';
             position: absolute;
             bottom: -15px; /* Position below the box */
-            right: 35px; /* Aligned with the widget. Adjusted for better pointing */
+            right: 50px; /* Adjusted for better alignment with the arrow */
             width: 0;
             height: 0;
             border-left: 15px solid transparent;
@@ -230,8 +230,8 @@
         /* Chat pointer arrow (adjusted) */
         .chat-pointer-arrow {
             position: fixed;
-            bottom: 60px; /* Adjusted to point to the widget */
-            right: 48px; /* Adjusted to point to the widget */
+            bottom: 45px; /* Adjusted to point directly to the chat icon */
+            right: 48px; /* Adjusted to align horizontally with the chat icon */
             height: 40px;
             width: 40px;
             z-index: 998; /* Below the widget */
@@ -247,13 +247,13 @@
             stroke: #8B5CF6; /* Purple color for the arrow */
             stroke-width: 3;
             fill: none;
-            /* Rotate the arrow to point upwards and slightly left */
-            transform: rotate(-90deg);
+            /* Rotate the arrow to point downwards */
+            transform: rotate(0deg); /* Changed from -90deg to 0deg for downward */
         }
 
         @keyframes bounceArrow {
-            0%, 100% { transform: translateY(0) rotate(-90deg); } /* Keep rotation consistent */
-            50% { transform: translateY(-10px) rotate(-90deg); }
+            0%, 100% { transform: translateY(0) rotate(0deg); } /* Keep rotation consistent */
+            50% { transform: translateY(-10px) rotate(0deg); }
         }
 
         /* Hide guide and arrow when the df-messenger is open */
@@ -296,7 +296,7 @@
     </div>
 
     <div class="widget-guide" id="widgetGuide">
-        <span class="widget-guide-highlight">CLICK HERE</span>
+        <span class="widget-guide-highlight">CLICK BELOW</span>
         <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
     </div>
 
