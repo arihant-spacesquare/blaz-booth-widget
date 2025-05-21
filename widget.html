@@ -226,7 +226,7 @@
         .widget-guide-icon {
             width: 30px;
             height: 30px;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Default for desktop */
             stroke: #8B5CF6;
             stroke-width: 2;
             fill: none;
@@ -325,30 +325,35 @@
                 font-size: 1em;
             }
 
+            /* >>> THIS IS THE CRITICAL CHANGE <<< */
             /* Hide "CLICK BELOW" on very small screens */
             .widget-guide-highlight {
-                display: none;
+                display: none; /* This should hide the text */
             }
 
             /* Adjust widget guide for smartphones */
             .widget-guide {
-                /* New positioning for mobile */
-                left: 50%; /* Start from the middle */
-                transform: translateX(calc(-50% + 18px)); /* Move left by half its width, then right by 18px */
-                right: auto; /* Override fixed right */
-                bottom: 75px; /* Keep it above the button, adjusted */
-                max-width: 160px; /* Make it narrower */
-                padding: 8px 12px; /* Reduce padding */
-                font-size: 0.75em; /* Smaller font for remaining text */
-                border-radius: 8px; /* Slightly less rounded */
+                left: 50%;
+                transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position */
+                right: auto;
+                bottom: 75px; /* Fine-tune vertical position */
+                max-width: 160px;
+                /* Adjust padding now that highlight is gone */
+                padding: 10px 12px; /* Slightly more vertical padding */
+                font-size: 0.75em;
+                border-radius: 8px;
             }
             
-            /* If the highlight text is removed, the icon and text might be too far apart.
-               Adjust margin-bottom for the icon on mobile if needed. */
+            /* Adjust margin for icon now that highlight text is gone */
             .widget-guide-icon {
-                margin-bottom: 5px; /* Reduce margin */
+                margin-bottom: 0; /* Remove bottom margin to bring text closer if only text left */
                 width: 24px;
                 height: 24px;
+            }
+            
+            /* If the text is the only thing left, make sure it has some vertical padding */
+            .widget-guide-text {
+                margin-top: 5px; /* Add a small top margin if needed after icon */
             }
 
             /* Adjust df-messenger positioning for very small screens if needed */
@@ -415,7 +420,6 @@
             const dfMessenger = document.querySelector('df-messenger');
             const widgetGuide = document.getElementById('widgetGuide');
 
-            // Function to show/hide the guide
             function toggleGuide() {
                 if (dfMessenger.opened) {
                     widgetGuide.style.opacity = '0';
@@ -426,10 +430,8 @@
                 }
             }
 
-            // Initial check on load
             toggleGuide();
 
-            // Listen for when the df-messenger opens or closes
             dfMessenger.addEventListener('df-messenger-loaded', function () {
                 dfMessenger.addEventListener('df-messenger-opened', toggleGuide);
                 dfMessenger.addEventListener('df-messenger-closed', toggleGuide);
