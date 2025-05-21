@@ -162,27 +162,19 @@
             margin-top: 15px;
         }
 
-        /* Dialogflow Messenger Widget Styling as provided */
+        /* Dialogflow Messenger Widget Styling from your provided code */
         df-messenger {
             z-index: 999;
             position: fixed;
             --df-messenger-font-color: #000;
-            --df-messenger-font-family: 'Montserrat', sans-serif; /* Changed to match body font */
+            --df-messenger-font-family: Google Sans; /* Used your provided font-family here */
             --df-messenger-chat-background: #f3f6fc;
             --df-messenger-message-user-background: #d3e3fd;
             --df-messenger-message-bot-background: #fff;
             bottom: 16px; /* Adjusted to match image_898188.png spacing */
             right: 16px; /* Adjusted to match image_898188.png spacing */
-            cursor: pointer;
         }
-
-        /* The image shows a custom icon instead of the default df-messenger button. */
-        /* To achieve this, we hide the default button and position a custom one */
-        df-messenger::part(df-messenger-button) {
-            /* If you want the default Dialogflow Messenger button to show, remove this rule. */
-            /* Otherwise, keep it to hide the default button and only have the widget appear. */
-            display: none;
-        }
+        /* No specific styling to hide the default button, so it will appear as normal */
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 </head>
@@ -218,4 +210,15 @@
 
     <df-messenger
         project-id="blaz-request-booth"
-        agent-id="ad471477-3a50-4b3f-9
+        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
+        language-code="en"
+        max-query-length="-1">
+        <df-messenger-chat-bubble
+            chat-title="blaz-booth-agent">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    
+    </body>
+</html>
