@@ -7,31 +7,33 @@
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <style>
         body {
-            font-family: 'Google Sans', sans-serif; /* A clean, modern font */
+            font-family: 'Google Sans', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Ensures content takes full viewport height */
+            min-height: 100vh;
             background-color: #f0f4f8; /* Light background for contrast */
             color: #333;
-            flex-direction: column; /* Arrange items vertically */
+            flex-direction: column;
         }
 
-        /* Styling for the main content area */
+        /* Styling for the main content area - kept for context but not the primary focus for action */
         .container {
             text-align: center;
             padding: 40px;
             background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            margin-bottom: 20px; /* Space above the widget for the button */
+            margin-bottom: 20px;
+            position: relative; /* Needed for positioning the guide element */
+            z-index: 1; /* Ensure it's above the background, below the widget */
         }
 
         h1 {
-            color: #1a73e8; /* Google Blue */
+            color: #1a73e8;
             font-size: 2.5em;
             margin-bottom: 15px;
         }
@@ -43,46 +45,71 @@
             color: #555;
         }
 
-        /* Button Styling - This is our new direct launch button */
-        .launch-button {
-            background-color: #1a73e8; /* Google Blue */
-            color: white;
-            padding: 15px 30px;
-            font-size: 1.2em;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            text-decoration: none; /* In case it's an <a> tag */
-            display: inline-block; /* Allows padding and vertical alignment */
-            margin-top: 20px; /* Space below text */
-        }
-
-        .launch-button:hover {
-            background-color: #1565c0; /* Darker blue on hover */
-            transform: translateY(-2px); /* Slight lift effect */
-        }
-
-        .launch-button:active {
-            transform: translateY(0); /* Press effect */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Dialogflow Messenger Widget Styling - Reverted for visibility */
+        /* Dialogflow Messenger Widget Styling (as provided by you, with minimal changes) */
         df-messenger {
-            z-index: 999;
-            position: fixed; /* Stays in place when scrolling */
+            z-index: 999; /* Keep it on top */
+            position: fixed;
             --df-messenger-font-color: #000;
-            --df-messenger-font-family: 'Google Sans', sans-serif;
-            --df-messenger-chat-background: #f3f6fc; /* Light background for chat window */
-            --df-messenger-message-user-background: #d3e3fd; /* User bubble blue */
-            --df-messenger-message-bot-background: #fff; /* Bot bubble white */
+            --df-messenger-font-family: Google Sans;
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
             bottom: 16px;
             right: 16px;
-            /* IMPORTANT: We are NOT setting display: none; here anymore.
-               The widget should be visible by default as intended by Dialogflow Messenger. */
+            /* No display: none; here, let it render normally */
+        }
+
+        /* NEW: Styling for the floating instruction bubble/arrow */
+        .instruction-bubble {
+            position: fixed;
+            bottom: 80px; /* Adjust to be above and slightly to the left of the chat bubble */
+            right: 20px;
+            background-color: #ffffff;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            font-size: 0.9em;
+            font-weight: bold;
+            z-index: 998; /* Below the messenger, but above other content */
+            opacity: 0; /* Start hidden */
+            transform: translateY(10px); /* Start slightly below */
+            animation: fadeInAndBounce 1.5s ease-out forwards 1s; /* Fade in and bounce after a delay */
+            max-width: 180px; /* Limit width */
+            text-align: center;
+        }
+
+        /* Simple arrow pointing to the widget */
+        .instruction-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px; /* Position below the bubble */
+            right: 25px; /* Adjust to point towards the bubble */
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #ffffff; /* Same color as bubble */
+        }
+
+        /* Animation for the instruction bubble */
+        @keyframes fadeInAndBounce {
+            0% { opacity: 0; transform: translateY(20px); }
+            50% { opacity: 1; transform: translateY(-5px); }
+            70% { transform: translateY(0px); }
+            100% { opacity: 1; transform: translateY(0px); }
+        }
+
+        /* Optional: Pulse animation for the df-messenger bubble itself to draw attention */
+        @keyframes pulseBubble {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(26, 115, 232, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(26, 115, 232, 0); }
+        }
+
+        /* Apply pulse to the chat bubble once the messenger component is ready */
+        df-messenger[data-ready="true"]::part(df-messenger-chat-bubble) {
+            animation: pulseBubble 2s infinite; /* Apply the animation */
         }
     </style>
 </head>
@@ -93,11 +120,12 @@
             Ready to secure your perfect spot at an upcoming Bläz event? Our interactive **Bläz Booth Agent** is here to guide you through the process quickly and efficiently.
         </p>
         <p>
-            Simply click the button below to instantly launch our chat assistant. It will walk you through collecting all the necessary details for your booth request. Once submitted, a dedicated Bläz team member will be in touch to confirm everything personally!
+            Please look for the chat icon in the **bottom right corner** of your screen to get started.
         </p>
-        <button id="requestBoothButton" class="launch-button">
-            Click to Request a Booth at a Bläz Event!
-        </button>
+    </div>
+
+    <div class="instruction-bubble" id="instructionBubble">
+        Click here to start your booth request!
     </div>
 
     <df-messenger
@@ -114,43 +142,41 @@
     <script>
         window.addEventListener('load', function() {
             const dfMessenger = document.getElementById('df-messenger');
-            const requestBoothButton = document.getElementById('requestBoothButton');
+            const instructionBubble = document.getElementById('instructionBubble');
 
-            if (dfMessenger && requestBoothButton) {
-                // Ensure the Dialogflow messenger is ready before interacting
+            if (dfMessenger) {
                 const waitForDfMessengerReady = setInterval(() => {
-                    // Check if the internal shadow DOM elements are loaded
-                    // We specifically look for the chat bubble within the shadow DOM to ensure it's ready.
-                    const chatBubbleInShadow = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
+                    // This checks for the internal shadow DOM element that becomes available when the widget is fully loaded
+                    const chatBubble = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
 
-                    if (chatBubbleInShadow) {
-                        clearInterval(waitForDfMessengerReady); // Stop polling
+                    if (chatBubble) {
+                        clearInterval(waitForDfMessengerReady); // Stop checking
 
-                        // Attach click listener to our custom button
-                        requestBoothButton.addEventListener('click', function() {
-                            console.log('Custom button clicked! Opening df-messenger and sending initial message.');
+                        // Mark df-messenger as ready to trigger the pulse animation
+                        dfMessenger.setAttribute('data-ready', 'true');
 
-                            // Force the chat window to expand
-                            dfMessenger.setAttribute('expand', 'true');
+                        // Hide the instruction bubble after a few seconds or when the chat is opened
+                        setTimeout(() => {
+                            instructionBubble.style.opacity = '0';
+                            instructionBubble.style.pointerEvents = 'none'; // Make it unclickable
+                        }, 8000); // Hide after 8 seconds
 
-                            // Send an empty message to trigger the bot's welcome intent
-                            // This also implicitly opens the chat if not already open
-                            dfMessenger.sendMessage('');
-
-                            // Hide the custom button after it's clicked and the chat is opened
-                            requestBoothButton.style.display = 'none';
+                        // Listener to hide instruction bubble if chat opens manually
+                        dfMessenger.addEventListener('df-messenger-opened', () => {
+                            instructionBubble.style.opacity = '0';
+                            instructionBubble.style.pointerEvents = 'none';
                         });
 
-                        // Add listener to show the button again if the df-messenger is closed
+                        // Listener to make instruction bubble reappear if chat closes
                         dfMessenger.addEventListener('df-messenger-close', () => {
-                            console.log('df-messenger closed.');
-                            requestBoothButton.style.display = 'inline-block'; // Show button again
+                            instructionBubble.style.opacity = '1';
+                            instructionBubble.style.pointerEvents = 'auto'; // Make it clickable again
+                            instructionBubble.style.animation = 'fadeInAndBounce 1.5s ease-out forwards'; // Re-animate
                         });
-
                     }
-                }, 100); // Check every 100ms for df-messenger to be fully loaded
+                }, 100); // Check every 100ms
             } else {
-                console.error('df-messenger or requestBoothButton element not found');
+                console.error('df-messenger element not found');
             }
         });
     </script>
