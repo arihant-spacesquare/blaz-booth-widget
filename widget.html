@@ -220,7 +220,7 @@
             color: #8B5CF6;
             font-size: 1.1em;
             margin-bottom: 5px;
-            display: block;
+            display: block; /* Visible by default on desktop */
         }
 
         .widget-guide-icon {
@@ -250,17 +250,17 @@
 
         @media (max-width: 768px) { /* Tablets and smaller */
             .blaz-content-box {
-                padding: 25px; /* Slightly less padding */
-                margin: 15px auto; /* Keep centered with some margin */
-                width: 90%; /* Take up more width */
+                padding: 25px;
+                margin: 15px auto;
+                width: 90%;
             }
 
             h1 {
-                font-size: 2em; /* Smaller heading */
+                font-size: 2em;
             }
 
             p {
-                font-size: 0.95em; /* Slightly smaller paragraphs */
+                font-size: 0.95em;
             }
 
             .blaz-logo-circle {
@@ -275,9 +275,9 @@
 
             /* Adjust widget guide for tablets/smaller desktops */
             .widget-guide {
-                bottom: 90px; /* Adjust vertical position */
-                right: 10px; /* Adjust horizontal position */
-                max-width: 200px; /* Slightly narrower */
+                bottom: 90px;
+                right: 10px;
+                max-width: 200px;
                 padding: 12px 18px;
                 font-size: 0.85em;
             }
@@ -296,15 +296,15 @@
             .blaz-content-box {
                 padding: 20px;
                 margin: 10px auto;
-                width: 95%; /* Take almost full width */
+                width: 95%;
             }
 
             h1 {
-                font-size: 1.6em; /* Even smaller heading */
+                font-size: 1.6em;
             }
 
             p {
-                font-size: 0.9em; /* Even smaller paragraphs */
+                font-size: 0.9em;
             }
 
             .blaz-logo-circle {
@@ -313,7 +313,7 @@
             }
 
             .blaz-logo-inner {
-                padding: 1px; /* Adjust padding for smaller logo */
+                padding: 1px;
             }
 
             .blaz-icon {
@@ -325,24 +325,28 @@
                 font-size: 1em;
             }
 
-            /* Critical adjustments for widget guide on smartphones */
-            .widget-guide {
-                /* Let's try to center it more, but offset to the right slightly to avoid overlapping the chat icon */
-                left: 50%; /* Start from the middle */
-                transform: translateX(calc(-50% + 20px)); /* Move left by half its width, then right by 20px */
-                right: auto; /* Override fixed right */
-                bottom: 80px; /* Keep it above the button */
-                max-width: 170px; /* Much narrower */
-                padding: 10px 15px;
-                font-size: 0.8em;
-                border-radius: 10px;
-            }
-
+            /* Hide "CLICK BELOW" on very small screens */
             .widget-guide-highlight {
-                font-size: 1em;
+                display: none;
             }
 
+            /* Adjust widget guide for smartphones */
+            .widget-guide {
+                /* New positioning for mobile */
+                left: 50%; /* Start from the middle */
+                transform: translateX(calc(-50% + 18px)); /* Move left by half its width, then right by 18px */
+                right: auto; /* Override fixed right */
+                bottom: 75px; /* Keep it above the button, adjusted */
+                max-width: 160px; /* Make it narrower */
+                padding: 8px 12px; /* Reduce padding */
+                font-size: 0.75em; /* Smaller font for remaining text */
+                border-radius: 8px; /* Slightly less rounded */
+            }
+            
+            /* If the highlight text is removed, the icon and text might be too far apart.
+               Adjust margin-bottom for the icon on mobile if needed. */
             .widget-guide-icon {
+                margin-bottom: 5px; /* Reduce margin */
                 width: 24px;
                 height: 24px;
             }
