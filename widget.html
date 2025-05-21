@@ -175,11 +175,11 @@
             right: 16px;
         }
 
-        /* Guide box styling (re-added) */
+        /* Guide box styling (re-added and adjusted) */
         .widget-guide {
             position: fixed;
             bottom: 100px; /* Position above the widget */
-            right: 20px;
+            right: 20px; /* Position to the right */
             background-color: rgba(0, 0, 0, 0.7); /* Darker, slightly transparent background */
             color: #ffffff;
             padding: 15px 20px;
@@ -197,11 +197,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transform: translateX(-50%) translateY(-50%); /* Adjust to center point of message box */
-            right: 50px; /* Align to the right */
-            bottom: 120px; /* Adjust vertical position */
-            transform: translateX(0); /* Remove center adjustment for a fixed right position */
-            left: unset;
         }
 
         .widget-guide-text {
@@ -223,7 +218,7 @@
             content: '';
             position: absolute;
             bottom: -15px; /* Position below the box */
-            right: 25px; /* Aligned with the widget */
+            right: 35px; /* Aligned with the widget. Adjusted for better pointing */
             width: 0;
             height: 0;
             border-left: 15px solid transparent;
@@ -232,11 +227,11 @@
             z-index: 998;
         }
 
-        /* Chat pointer arrow (re-added) */
+        /* Chat pointer arrow (adjusted) */
         .chat-pointer-arrow {
             position: fixed;
-            bottom: 60px; /* Adjust to point to the widget */
-            right: 60px; /* Adjust to point to the widget */
+            bottom: 60px; /* Adjusted to point to the widget */
+            right: 48px; /* Adjusted to point to the widget */
             height: 40px;
             width: 40px;
             z-index: 998; /* Below the widget */
@@ -252,11 +247,13 @@
             stroke: #8B5CF6; /* Purple color for the arrow */
             stroke-width: 3;
             fill: none;
+            /* Rotate the arrow to point upwards and slightly left */
+            transform: rotate(-90deg);
         }
 
         @keyframes bounceArrow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            0%, 100% { transform: translateY(0) rotate(-90deg); } /* Keep rotation consistent */
+            50% { transform: translateY(-10px) rotate(-90deg); }
         }
 
         /* Hide guide and arrow when the df-messenger is open */
@@ -305,8 +302,7 @@
 
     <div class="chat-pointer-arrow" id="chatPointerArrow">
         <svg viewBox="0 0 64 64">
-            <path d="M22 42L42 22" />
-            <path d="M24 22H42V40" />
+            <path d="M32 0 L64 32 L48 32 L48 64 L16 64 L16 32 L0 32 Z" />
         </svg>
     </div>
 
