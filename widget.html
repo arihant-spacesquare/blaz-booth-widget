@@ -46,19 +46,6 @@
             z-index: 0;
         }
 
-        .glow-2 {
-            position: absolute;
-            bottom: 10%;
-            right: 30%;
-            height: 300px;
-            width: 300px;
-            border-radius: 50%;
-            background: rgba(59, 130, 246, 0.2); /* Blue-500 with opacity */
-            filter: blur(100px);
-            animation: pulseGlow 5s infinite alternate-reverse;
-            z-index: 0;
-        }
-
         .glow-3 {
             position: absolute;
             top: 30%;
@@ -192,140 +179,15 @@
         /* The image shows a custom icon instead of the default df-messenger button. */
         /* To achieve this, we hide the default button and position a custom one */
         df-messenger::part(df-messenger-button) {
-            display: none; /* Hide the default button */
-        }
-
-        /* Custom chat bubble / button styling to match image_89eb24.png and image_898188.png's visual style */
-        .custom-chat-button {
-            position: fixed;
-            bottom: 24px; /* Adjusted to match image_898188.png */
-            right: 24px; /* Adjusted to match image_898188.png */
-            z-index: 1000; /* Higher than messenger itself to capture clicks */
-            width: 64px; /* Size of the button */
-            height: 64px;
-            border-radius: 50%;
-            background-color: #f0f0f0; /* Light background for the icon */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-            animation: pulseCustomChatButton 2s infinite; /* Pulsing effect */
-        }
-
-        .custom-chat-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .custom-chat-button svg {
-            width: 32px;
-            height: 32px;
-            color: #3b82f6; /* Blue icon color */
-        }
-
-        @keyframes pulseCustomChatButton {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
-        }
-
-        /* Guide text from image_898188.png, image_89dfbb.png, image_8882c5.png, image_896ec3.png */
-        .widget-guide {
-            position: fixed;
-            bottom: 100px; /* Position above the custom button */
-            right: 80px; /* Adjusted to align with the button */
-            background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
-            backdrop-filter: blur(8px);
-            padding: 12px 16px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-            font-size: 0.85em;
-            text-align: right; /* Text aligns right */
-            color: #ffffff;
-            z-index: 998;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            pointer-events: none; /* Allows clicks to pass through */
-        }
-
-        .widget-guide-text {
-            color: #cccccc; /* Lighter grey for general text */
-            margin-top: 4px;
-        }
-
-        .widget-guide-highlight {
-            font-weight: bold;
-            background: linear-gradient(to right, #a78bfa, #f472b6); /* Purple-pink gradient */
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Arrow for the widget guide from image_896ec3.png */
-        .widget-guide::after {
-            content: '';
-            position: absolute;
-            bottom: -15px; /* Position below the bubble */
-            right: 20px; /* Align with the button */
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 15px solid rgba(255, 255, 255, 0.1); /* Matches guide background */
-            filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
-        }
-
-        /* Arrow pointing to the chat bubble (the one that moves) from image_89dfbb.png */
-        .chat-pointer-arrow {
-            position: fixed;
-            bottom: 60px; /* Adjust based on button size */
-            right: 70px; /* Adjust based on button size */
-            z-index: 999;
-            width: 60px;
-            height: 60px;
-            opacity: 0;
-            transition: opacity 0.5s ease-out;
-            animation: bounceArrow 1.5s infinite; /* Continuous bounce */
-        }
-        
-        .chat-pointer-arrow svg {
-            width: 100%;
-            height: 100%;
-            fill: none;
-            stroke: #8B5CF6; /* Purple color from image_89dfbb.png */
-            stroke-width: 3;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        @keyframes bounceArrow {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(10px, -10px); }
-        }
-
-        /* Hide the elements when chat is open */
-        df-messenger[opened] ~ .widget-guide {
-            opacity: 0 !important;
-            transform: translateX(20px) !important;
-        }
-        df-messenger[opened] ~ .chat-pointer-arrow {
-            opacity: 0 !important;
-        }
-
-        /* The custom button itself should not hide */
-        df-messenger[opened] ~ .custom-chat-button {
-            opacity: 1 !important; /* Keep the button visible even when chat is open */
-            pointer-events: auto;
+            /* If you want the default Dialogflow Messenger button to show, remove this rule. */
+            /* Otherwise, keep it to hide the default button and only have the widget appear. */
+            display: none;
         }
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 </head>
 <body>
     <div class="glow-1"></div>
-    <div class="glow-2"></div>
     <div class="glow-3"></div>
 
     <div class="blaz-content-box">
@@ -356,86 +218,4 @@
 
     <df-messenger
         project-id="blaz-request-booth"
-        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
-        language-code="en"
-        max-query-length="-1"
-        id="df-messenger">
-        <df-messenger-chat-bubble chat-title="blaz-booth-agent">
-        </df-messenger-chat-bubble>
-    </df-messenger>
-
-    <div class="custom-chat-button" id="customChatButton">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="feather feather-message-square">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-    </div>
-
-    <div class="widget-guide" id="widgetGuide">
-        <span class="widget-guide-highlight">CLICK HERE</span>
-        <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
-    </div>
-
-    <div class="chat-pointer-arrow" id="chatPointerArrow">
-        <svg viewBox="0 0 64 64">
-            <path d="M22 42L42 22" />
-            <path d="M24 22H42V40" />
-        </svg>
-    </div>
-
-    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dfMessenger = document.getElementById('df-messenger');
-            const widgetGuide = document.getElementById('widgetGuide');
-            const customChatButton = document.getElementById('customChatButton');
-            const chatPointerArrow = document.getElementById('chatPointerArrow');
-
-            let chatReady = false;
-
-            // Wait for the df-messenger to be ready and rendered
-            const checkDfMessengerReady = setInterval(() => {
-                // Ensure the chat bubble is actually loaded within the shadow DOM
-                const dfMessengerChatBubble = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
-                if (dfMessengerChatBubble) {
-                    clearInterval(checkDfMessengerReady);
-                    chatReady = true;
-
-                    // Show the guide and arrow after a short delay
-                    setTimeout(() => {
-                        widgetGuide.style.opacity = '1';
-                        widgetGuide.style.transform = 'translateX(0)';
-                        chatPointerArrow.style.opacity = '1';
-                    }, 1500); // Delay for visual appeal
-
-                    // Set up click listener for the custom button
-                    customChatButton.addEventListener('click', () => {
-                        // Programmatically open the df-messenger
-                        if (dfMessenger) {
-                            dfMessenger.setAttribute('expand', 'true');
-                        }
-                    });
-
-                    // Event listener for when the chat opens
-                    dfMessenger.addEventListener('df-messenger-opened', () => {
-                        widgetGuide.style.opacity = '0';
-                        widgetGuide.style.transform = 'translateX(20px)';
-                        chatPointerArrow.style.opacity = '0';
-                        // Optionally stop the animation on the custom button when chat is open
-                        customChatButton.style.animation = 'none';
-                    });
-
-                    // Event listener for when the chat closes
-                    dfMessenger.addEventListener('df-messenger-close', () => {
-                        widgetGuide.style.opacity = '1';
-                        widgetGuide.style.transform = 'translateX(0)';
-                        chatPointerArrow.style.opacity = '1';
-                        // Restart the animation on the custom button when chat closes
-                        customChatButton.style.animation = 'pulseCustomChatButton 2s infinite';
-                    });
-                }
-            }, 100); // Check every 100ms
-        });
-    </script>
-</body>
-</html>
+        agent-id="ad471477-3a50-4b3f-9
