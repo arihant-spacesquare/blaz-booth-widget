@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -22,48 +22,50 @@
             overflow: hidden; /* Prevent scrollbars */
         }
 
-        /* Central Content - Minimalist and Elegant */
+        /* Central Content - Ultra Minimalist and High Contrast */
         .blaz-central-content {
             text-align: center;
-            max-width: 600px; /* Concise width */
-            padding: 40px;
+            max-width: 500px; /* Very narrow for extreme conciseness */
+            padding: 20px;
             position: relative;
             z-index: 1;
             opacity: 0; /* Start hidden for animation */
-            transform: translateY(20px);
+            transform: translateY(10px); /* Subtle initial offset */
             animation: fadeInCentralContent 1s ease-out forwards 0.5s;
         }
 
         .blaz-central-content .icon {
-            font-size: 3.5em; /* Larger, more striking icon */
+            /* Using a more abstract, elegant unicode character for 'connection' or 'signal' */
+            font-size: 4.5em; /* Larger, more impactful */
             color: #ffeb3b; /* Bläz accent color */
-            margin-bottom: 15px;
+            margin-bottom: 8px; /* Closer to the title */
             display: block;
-            text-shadow: 0 0 15px rgba(255, 235, 59, 0.4); /* Soft glow */
+            text-shadow: 0 0 20px rgba(255, 235, 59, 0.6); /* Stronger, softer glow */
+            line-height: 1; /* Ensure tight spacing for icon */
         }
 
         .blaz-central-content h1 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Playfair Display', serif; /* Elegant serif for main title */
             font-weight: 700;
-            font-size: 3em; /* Elegant, prominent title */
+            font-size: 2.8em; /* Prominent and clear */
             color: #ffffff;
-            margin-bottom: 20px;
-            letter-spacing: 0.05em;
+            margin-bottom: 10px; /* Closer to paragraph */
+            letter-spacing: 0.05em; /* Refined spacing */
         }
 
         .blaz-central-content p {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Clean sans-serif for body text */
             font-weight: 300; /* Light weight for modern feel */
-            font-size: 1.15em;
-            line-height: 1.6;
-            color: rgba(255, 255, 255, 0.9); /* Slightly muted white for elegance */
+            font-size: 1.05em; /* Optimal readability */
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.95); /* Brighter white for high contrast */
             margin: 0 auto;
-            max-width: 85%; /* Keeps lines concise */
+            max-width: 95%; /* Allows content to use available space */
         }
 
         .blaz-central-content strong {
-            font-weight: 700; /* Bold for specific emphasis */
-            color: #ffeb3b; /* Accent color for emphasis */
+            font-weight: 700;
+            color: #ffeb3b;
         }
 
         /* Dialogflow Messenger Widget Styling */
@@ -78,148 +80,39 @@
             bottom: 30px;
             right: 30px;
             cursor: pointer;
-            --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.6); /* Deep, elegant shadow */
+            --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.8); /* Deeper, more luxurious shadow */
             border-radius: 50%;
             transition: transform 0.3s ease-in-out;
             --df-messenger-button-background-color: #1a73e8; /* Ensures the blue button is visible */
         }
 
-        /* Subtle Bottom-Right Guide - Absolutely NO OVERLAP */
+        /* Bottom-Right Guide - Sleek, High Contrast, and Explicitly Pointing */
         .bottom-right-guide {
             position: fixed;
-            bottom: 100px; /* Position above the widget */
-            right: 100px; /* Sufficient space to the left of the widget */
-            padding: 10px 15px; /* Minimal padding */
-            border-radius: 5px; /* Subtle rounding */
-            background-color: rgba(255, 255, 255, 0.08); /* Very subtle, transparent background */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Thin, elegant border */
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* Soft, contained shadow */
+            bottom: 120px; /* Position well above the widget */
+            right: 40px; /* Align with widget's right edge */
             text-align: right;
-            z-index: 998; /* Below messenger */
-            pointer-events: none; /* Allows clicks to pass through */
+            z-index: 998;
+            pointer-events: none; /* Allow clicks to pass through to the widget */
             opacity: 0; /* Start hidden */
-            transform: translateX(20px); /* Slide in from right */
-            animation: slideInBottomRight 1s ease-out forwards 1.8s; /* Delayed animation */
+            transform: translateX(30px); /* Slide in from right */
+            animation: slideInBottomRight 1s ease-out forwards 1.8s; /* Delayed, smooth animation */
         }
 
         .bottom-right-guide p {
             margin: 0;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 500;
-            font-size: 0.9em; /* Small, concise text */
-            color: #ffffff;
-            line-height: 1.3;
+            font-family: 'Cinzel', serif; /* Distinct, elegant serif font for strong contrast */
+            font-weight: 700; /* Bold for maximum impact */
+            font-size: 1.2em; /* Larger for readability */
+            color: #ffeb3b; /* Accent color for high contrast */
+            line-height: 1.1; /* Tighter for a sleek look */
+            text-shadow: 0 0 10px rgba(255, 235, 59, 0.8); /* Prominent glow */
+            letter-spacing: 0.08em; /* More spacing for elegance */
+            text-transform: uppercase; /* Chic, modern feel */
         }
 
-        .bottom-right-guide strong {
-            color: #ffeb3b; /* Accent color for highlight */
-            font-weight: 700;
-        }
-
-        /* Small, elegant pointing arrow */
+        /* Elegant, clear pointer with a subtle glow */
         .bottom-right-guide::after {
             content: '';
             position: absolute;
-            bottom: 15px; /* Adjust to point from the middle-right */
-            right: -10px; /* Position outside the box */
-            width: 0;
-            height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: 8px solid rgba(255, 255, 255, 0.08); /* Matches box background */
-            transform: rotate(5deg); /* Slight angle */
-        }
-
-
-        /* Animations */
-        @keyframes fadeInCentralContent {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInBottomRight {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes pulseChatBubble {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-
-        df-messenger[data-ready="true"]::part(df-messenger-button) {
-            animation: pulseChatBubble 2s infinite;
-        }
-
-        /* Bläz Logo (Optional) */
-        .blaz-logo {
-            position: absolute;
-            top: 30px;
-            left: 50px;
-            height: 40px;
-            z-index: 1000;
-            filter: invert(100%); /* If logo is black, make it white for dark background */
-        }
-    </style>
-</head>
-<body>
-    <div class="blaz-central-content">
-        <span class="icon">&#127908;</span> <h1>Bläz Booth Agent</h1>
-        <p>
-            Use the chat at the **bottom right** to request a booth &mdash; a Bläz team member will call to confirm.
-        </p>
-    </div>
-
-    <div class="bottom-right-guide" id="bottomRightGuide">
-        <p>
-            **Click here** to chat
-            <br>
-            and start your request.
-        </p>
-    </div>
-
-    <df-messenger
-        project-id="blaz-request-booth"
-        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
-        language-code="en"
-        max-query-length="-1"
-        id="df-messenger">
-        <df-messenger-chat-bubble chat-title="Bläz Booth Agent"></df-messenger-chat-bubble>
-    </df-messenger>
-
-    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-
-    <script>
-        window.addEventListener('load', function() {
-            const dfMessenger = document.getElementById('df-messenger');
-            const bottomRightGuide = document.getElementById('bottomRightGuide');
-
-            if (dfMessenger) {
-                const waitForDfMessengerReady = setInterval(() => {
-                    const chatButton = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-button') || dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
-
-                    if (chatButton) {
-                        clearInterval(waitForDfMessengerReady);
-
-                        dfMessenger.setAttribute('data-ready', 'true'); // Triggers pulse animation
-
-                        // Hide the instruction when the chat is opened
-                        dfMessenger.addEventListener('df-messenger-opened', () => {
-                            bottomRightGuide.style.opacity = '0';
-                            bottomRightGuide.style.pointerEvents = 'none';
-                        });
-
-                        // Show the instruction again if the chat is closed
-                        dfMessenger.addEventListener('df-messenger-close', () => {
-                            bottomRightGuide.style.opacity = '1';
-                            bottomRightGuide.style.pointerEvents = 'auto';
-                            bottomRightGuide.style.animation = 'slideInBottomRight 1s ease-out forwards';
-                        });
-                    }
-                }, 100);
-            } else {
-                console.error('df-messenger element not found');
-            }
-        });
-    </script>
-</body>
-</html>
+            bottom: -15px; /* Position further
