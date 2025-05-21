@@ -153,17 +153,11 @@
             font-weight: 500; /* Medium weight */
         }
 
-        .instruction-bottom {
-            font-weight: 700;
-            color: #ffffff; /* White text */
-            margin-top: 20px; /* Space before instructions */
-        }
-
-        .call-to-action {
+        .instruction-main {
+            font-weight: 700; /* Bold the instruction */
             font-size: 1.1em; /* Slightly larger */
-            font-weight: 700;
-            color: #ffeb3b; /* Yellow accent */
-            text-transform: uppercase;
+            color: #ffffff;
+            margin-top: 20px; /* Space before instructions */
         }
 
         .divider {
@@ -181,26 +175,20 @@
             margin-top: 15px;
         }
 
-        /* Dialogflow Messenger Widget Styling from image_898188.png */
+        /* Dialogflow Messenger Widget Styling as provided */
         df-messenger {
             z-index: 999;
             position: fixed;
-            bottom: 24px; /* Adjusted to match image_898188.png */
-            right: 24px; /* Adjusted to match image_898188.png */
-            --df-messenger-font-family: 'Montserrat', sans-serif;
-            --df-messenger-chat-background: #0a0a0e; /* Darker chat background */
-            --df-messenger-message-user-background: #8B5CF6; /* Purple message background */
-            --df-messenger-message-user-color: white;
-            --df-messenger-message-bot-background: #2a2a2a; /* Darker bot message background */
-            --df-messenger-message-bot-color: #ffffff; /* White bot message color */
-            --df-messenger-button-background-color: transparent; /* Making it transparent to match the image */
-            --df-messenger-button-box-shadow: none; /* Removing default shadow */
-            --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
-            --df-messenger-header-background: #1a1a1a;
-            --df-messenger-header-font-color: #ffffff;
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: 'Montserrat', sans-serif; /* Changed to match body font */
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px; /* Adjusted to match image_898188.png spacing */
+            right: 16px; /* Adjusted to match image_898188.png spacing */
             cursor: pointer;
         }
-        
+
         /* The image shows a custom icon instead of the default df-messenger button. */
         /* To achieve this, we hide the default button and position a custom one */
         df-messenger::part(df-messenger-button) {
@@ -210,8 +198,8 @@
         /* Custom chat bubble / button styling to match image_898188.png */
         .custom-chat-button {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
+            bottom: 24px; /* Adjusted to match image_898188.png */
+            right: 24px; /* Adjusted to match image_898188.png */
             z-index: 1000; /* Higher than messenger itself to capture clicks */
             width: 64px; /* Size of the button */
             height: 64px;
@@ -243,8 +231,7 @@
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
         }
 
-
-        /* Guide text from image_898188.png, image_8882c5.png */
+        /* Guide text from image_898188.png, image_89dfbb.png, image_8882c5.png, image_896ec3.png */
         .widget-guide {
             position: fixed;
             bottom: 100px; /* Position above the custom button */
@@ -320,11 +307,11 @@
         }
 
         /* Hide the elements when chat is open */
-        df-messenger[opened] + .widget-guide {
+        df-messenger[opened] ~ .widget-guide {
             opacity: 0 !important;
             transform: translateX(20px) !important;
         }
-        df-messenger[opened] + .widget-guide + .custom-chat-button .chat-pointer-arrow {
+        df-messenger[opened] ~ .chat-pointer-arrow {
             opacity: 0 !important;
         }
 
@@ -333,9 +320,8 @@
             opacity: 1 !important; /* Keep the button visible even when chat is open */
             pointer-events: auto;
         }
-
-
     </style>
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 </head>
 <body>
     <div class="glow-1"></div>
@@ -354,17 +340,14 @@
                       </defs>
                       <circle cx="50" cy="50" r="20" fill="#ffffff" opacity="0.1" />
                     </svg>
-                    </div>
+                </div>
             </div>
         </div>
         
         <h1>Bläz VIP Booth Experience</h1>
         
-        <p class="tagline">
-            Reserve your exclusive VIP booth for an upcoming <span class="highlight-gradient">Bläz Entertainment</span> event.
-        </p>
-        <p class="tagline instruction-bottom">
-            Click the chat icon in the <span class="highlight-gradient">bottom right corner</span> to request your booth now!
+        <p class="instruction-main">
+            Click the chat icon in the <span class="highlight-gradient">bottom right corner</span> to request a booth for an upcoming <span class="highlight-gradient">Bläz Entertainment</span> event!
         </p>
         
         <div class="divider"></div>
@@ -377,7 +360,8 @@
         language-code="en"
         max-query-length="-1"
         id="df-messenger">
-        <df-messenger-chat-bubble chat-title="Bläz Booth Agent"></df-messenger-chat-bubble>
+        <df-messenger-chat-bubble chat-title="blaz-booth-agent">
+        </df-messenger-chat-bubble>
     </df-messenger>
 
     <div class="custom-chat-button" id="customChatButton">
@@ -411,8 +395,9 @@
 
             // Wait for the df-messenger to be ready and rendered
             const checkDfMessengerReady = setInterval(() => {
-                const dfMessengerButton = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-button');
-                if (dfMessengerButton) {
+                // Ensure the chat bubble is actually loaded within the shadow DOM
+                const dfMessengerChatBubble = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
+                if (dfMessengerChatBubble) {
                     clearInterval(checkDfMessengerReady);
                     chatReady = true;
 
