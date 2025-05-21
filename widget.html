@@ -8,6 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        /* Universal box-sizing for easier layout calculations */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Montserrat', sans-serif;
             margin: 0;
@@ -16,13 +21,13 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #0a0a0e; /* Dark background from image_896ec3.png */
+            background-color: #0a0a0e; /* Dark background */
             color: #ffffff;
-            overflow: hidden; /* Prevent scrollbars unless absolutely necessary */
+            overflow-x: hidden; /* Prevent horizontal scrollbars */
             position: relative; /* For absolute positioning of background elements */
         }
 
-        /* Background effects mimicking image_896ec3.png */
+        /* Background effects */
         body::before {
             content: '';
             position: absolute;
@@ -32,7 +37,6 @@
             z-index: 0;
         }
 
-        /* Decorative glow effects from image_896ec3.png */
         .glow-1 {
             position: absolute;
             top: 20%;
@@ -40,7 +44,7 @@
             height: 250px;
             width: 250px;
             border-radius: 50%;
-            background: rgba(139, 92, 246, 0.2); /* Purple-600 with opacity */
+            background: rgba(139, 92, 246, 0.2);
             filter: blur(100px);
             animation: pulseGlow 4s infinite alternate;
             z-index: 0;
@@ -53,7 +57,7 @@
             height: 200px;
             width: 200px;
             border-radius: 50%;
-            background: rgba(236, 72, 153, 0.1); /* Pink-500 with opacity */
+            background: rgba(236, 72, 153, 0.1);
             filter: blur(80px);
             animation: pulseGlow 3s infinite alternate;
             z-index: 0;
@@ -65,25 +69,24 @@
             100% { transform: scale(1); opacity: 0.2; }
         }
 
-        /* Main content container, mimicking the Bläz site's text box from image_896ec3.png */
         .blaz-content-box {
             text-align: center;
             padding: 40px;
-            background-color: rgba(0, 0, 0, 0.3); /* Transparent black */
-            border-radius: 16px; /* More rounded */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle white border */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Deeper shadow */
-            max-width: 500px; /* Adjusted to match image_898188.png */
-            margin: 20px;
-            z-index: 10; /* Ensure it's above background effects */
-            backdrop-filter: blur(10px); /* Frosted glass effect */
-            width: calc(100% - 40px); /* Make it responsive on smaller screens */
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            max-width: 500px; /* Max width for desktop */
+            width: calc(100% - 40px); /* Responsive width for mobile */
+            margin: 20px auto; /* Center horizontally, add vertical margin */
+            z-index: 10;
+            backdrop-filter: blur(10px);
         }
 
         .blaz-logo-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 24px; /* Space between logo and title */
+            margin-bottom: 24px;
         }
 
         .blaz-logo-circle {
@@ -93,16 +96,16 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background: linear-gradient(to right, #8B5CF6, #3B82F6, #A78BFA); /* Gradient border */
-            padding: 2px; /* acts as the border thickness */
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); /* Glow effect */
+            background: linear-gradient(to right, #8B5CF6, #3B82F6, #A78BFA);
+            padding: 2px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
         }
 
         .blaz-logo-inner {
             height: 100%;
             width: 100%;
             border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.8); /* Dark inner circle */
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -111,49 +114,48 @@
         .blaz-icon {
             height: 56px;
             width: 56px;
-            color: #A78BFA; /* Purple color for the icon */
-            fill: currentColor; /* Use current color for fill */
+            color: #A78BFA;
+            fill: currentColor;
         }
 
         h1 {
             font-family: 'Playfair Display', serif;
             font-weight: 700;
-            font-size: 2.5em; /* Adjusted to match image_898188.png */
+            font-size: 2.5em;
             color: #ffffff;
-            margin-bottom: 15px; /* Spacing */
+            margin-bottom: 15px;
             letter-spacing: 0.05em;
         }
 
         p {
             font-family: 'Montserrat', sans-serif;
             font-weight: 300;
-            font-size: 1em; /* Slightly smaller for compactness */
+            font-size: 1em;
             line-height: 1.6;
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 10px; /* Consistent spacing */
+            margin-bottom: 10px;
         }
 
-        /* Specific text styling from image_898188.png */
         .highlight-gradient {
-            background: linear-gradient(to right, #a78bfa, #f472b6, #60a5fa); /* Purple, Pink, Blue gradient */
+            background: linear-gradient(to right, #a78bfa, #f472b6, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 500; /* Medium weight */
+            font-weight: 500;
         }
 
         .instruction-main {
-            font-weight: 700; /* Bold the instruction */
-            font-size: 1.1em; /* Slightly larger */
+            font-weight: 700;
+            font-size: 1.1em;
             color: #ffffff;
-            margin-top: 20px; /* Space before instructions */
+            margin-top: 20px;
         }
 
         .divider {
             width: 100px;
             height: 4px;
-            background: linear-gradient(to right, #8B5CF6, #3B82F6); /* Purple-Blue gradient */
+            background: linear-gradient(to right, #8B5CF6, #3B82F6);
             border-radius: 2px;
-            margin: 20px auto; /* Center the divider */
+            margin: 20px auto;
         }
 
         .tagline-bottom {
@@ -176,33 +178,32 @@
             right: 16px;
         }
 
-        /* Guide box styling (re-added and adjusted) */
+        /* Guide box styling */
         .widget-guide {
             position: fixed;
-            bottom: 110px; /* Adjusted to be above the widget icon */
-            right: 15px; /* Aligned with the widget on the right */
-            background-color: rgba(0, 0, 0, 0.7); /* Darker, slightly transparent background */
+            bottom: 110px; /* Default for desktop */
+            right: 15px;  /* Default for desktop */
+            background-color: rgba(0, 0, 0, 0.7);
             color: #ffffff;
             padding: 15px 20px;
-            border-radius: 12px; /* Rounded corners */
+            border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            max-width: 220px;
+            max-width: 220px; /* Default for desktop */
             text-align: center;
             font-size: 0.9em;
             line-height: 1.4;
-            z-index: 998; /* Below the widget, above content */
+            z-index: 998;
             transition: opacity 0.3s ease-in-out;
-            opacity: 1; /* Initially visible */
-            pointer-events: none; /* Allows clicks to pass through to elements below */
+            opacity: 1;
+            pointer-events: none;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border: 2px solid transparent; /* For the glow effect */
-            animation: pulseBorderGlow 2s infinite alternate; /* Pulsing border glow */
+            border: 2px solid transparent;
+            animation: pulseBorderGlow 2s infinite alternate;
         }
 
-        /* Animation for pulsing border glow */
         @keyframes pulseBorderGlow {
             0% { border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 10px rgba(139, 92, 246, 0.6); }
             100% { border-color: rgba(139, 92, 246, 0.8); box-shadow: 0 0 20px rgba(139, 92, 246, 1); }
@@ -216,24 +217,22 @@
 
         .widget-guide-highlight {
             font-weight: bold;
-            color: #8B5CF6; /* A distinct highlight color, e.g., purple */
+            color: #8B5CF6;
             font-size: 1.1em;
             margin-bottom: 5px;
             display: block;
         }
 
-        /* Icon within the guide box */
         .widget-guide-icon {
             width: 30px;
             height: 30px;
             margin-bottom: 10px;
-            stroke: #8B5CF6; /* Purple color for the icon */
+            stroke: #8B5CF6;
             stroke-width: 2;
             fill: none;
-            animation: pulseIconGlow 2s infinite alternate; /* Pulsing icon glow */
+            animation: pulseIconGlow 2s infinite alternate;
         }
 
-        /* Animation for pulsing icon glow */
         @keyframes pulseIconGlow {
             0% { stroke-opacity: 0.6; transform: scale(1); }
             100% { stroke-opacity: 1; transform: scale(1.1); }
@@ -242,93 +241,116 @@
         /* Hide guide when the df-messenger is open */
         df-messenger[opened] ~ .widget-guide {
             opacity: 0;
-            pointer-events: none; /* Disable interaction when hidden */
+            pointer-events: none;
         }
 
         /* ******************************************* */
         /* RESPONSIVE DESIGN - MEDIA QUERIES FOR MOBILE */
         /* ******************************************* */
 
-        @media (max-width: 768px) { /* Styles for screens up to 768px wide (typical tablet portrait and smaller) */
+        @media (max-width: 768px) { /* Tablets and smaller */
             .blaz-content-box {
-                padding: 20px; /* Reduce padding on smaller screens */
-                margin: 10px; /* Reduce margin */
+                padding: 25px; /* Slightly less padding */
+                margin: 15px auto; /* Keep centered with some margin */
+                width: 90%; /* Take up more width */
             }
 
             h1 {
-                font-size: 1.8em; /* Smaller font size for headings */
+                font-size: 2em; /* Smaller heading */
             }
 
             p {
-                font-size: 0.9em; /* Smaller font size for paragraphs */
+                font-size: 0.95em; /* Slightly smaller paragraphs */
             }
 
             .blaz-logo-circle {
-                height: 60px; /* Smaller logo */
-                width: 60px;
+                height: 70px;
+                width: 70px;
             }
 
             .blaz-icon {
-                height: 40px; /* Smaller logo icon */
-                width: 40px;
+                height: 50px;
+                width: 50px;
             }
 
-            /* Adjust widget guide for mobile */
+            /* Adjust widget guide for tablets/smaller desktops */
             .widget-guide {
-                bottom: 80px; /* Adjust vertical position for mobile */
-                right: 10px; /* Adjust horizontal position for mobile */
-                max-width: 180px; /* Make the guide box narrower */
-                padding: 10px 15px; /* Reduce padding */
-                font-size: 0.8em; /* Smaller font size for guide text */
-                border-radius: 8px; /* Slightly less rounded corners */
-            }
-
-            .widget-guide-highlight {
-                font-size: 1em; /* Keep highlight readable */
-                margin-bottom: 3px;
-            }
-
-            .widget-guide-icon {
-                width: 25px; /* Smaller icon in guide */
-                height: 25px;
-                margin-bottom: 5px;
-            }
-        }
-
-        @media (max-width: 480px) { /* Styles for very small screens (most smartphones) */
-            body {
-                /* Potentially add overflow-y: auto if content might exceed viewport height on small screens */
-                /* overflow-y: auto; */
-            }
-
-            .blaz-content-box {
-                padding: 15px;
-                margin: 5px;
-            }
-
-            h1 {
-                font-size: 1.5em;
-            }
-
-            p {
+                bottom: 90px; /* Adjust vertical position */
+                right: 10px; /* Adjust horizontal position */
+                max-width: 200px; /* Slightly narrower */
+                padding: 12px 18px;
                 font-size: 0.85em;
             }
 
-            .widget-guide {
-                bottom: 70px; /* Further adjust for very small screens */
-                right: 5px; /* Closer to the edge */
-                max-width: 160px; /* Even narrower */
-                padding: 8px 12px;
-                font-size: 0.75em;
-            }
-
             .widget-guide-highlight {
-                font-size: 0.9em;
+                font-size: 1.05em;
             }
 
             .widget-guide-icon {
-                width: 20px;
-                height: 20px;
+                width: 28px;
+                height: 28px;
+            }
+        }
+
+        @media (max-width: 480px) { /* Smartphones */
+            .blaz-content-box {
+                padding: 20px;
+                margin: 10px auto;
+                width: 95%; /* Take almost full width */
+            }
+
+            h1 {
+                font-size: 1.6em; /* Even smaller heading */
+            }
+
+            p {
+                font-size: 0.9em; /* Even smaller paragraphs */
+            }
+
+            .blaz-logo-circle {
+                height: 50px;
+                width: 50px;
+            }
+
+            .blaz-logo-inner {
+                padding: 1px; /* Adjust padding for smaller logo */
+            }
+
+            .blaz-icon {
+                height: 35px;
+                width: 35px;
+            }
+
+            .instruction-main {
+                font-size: 1em;
+            }
+
+            /* Critical adjustments for widget guide on smartphones */
+            .widget-guide {
+                /* Let's try to center it more, but offset to the right slightly to avoid overlapping the chat icon */
+                left: 50%; /* Start from the middle */
+                transform: translateX(calc(-50% + 20px)); /* Move left by half its width, then right by 20px */
+                right: auto; /* Override fixed right */
+                bottom: 80px; /* Keep it above the button */
+                max-width: 170px; /* Much narrower */
+                padding: 10px 15px;
+                font-size: 0.8em;
+                border-radius: 10px;
+            }
+
+            .widget-guide-highlight {
+                font-size: 1em;
+            }
+
+            .widget-guide-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            /* Adjust df-messenger positioning for very small screens if needed */
+            df-messenger {
+                bottom: 10px;
+                right: 10px;
             }
         }
     </style>
@@ -391,13 +413,12 @@
 
             // Function to show/hide the guide
             function toggleGuide() {
-                // dfMessenger.opened is a property that indicates if the chat window is open
                 if (dfMessenger.opened) {
                     widgetGuide.style.opacity = '0';
-                    widgetGuide.style.pointerEvents = 'none'; // Disable clicks
+                    widgetGuide.style.pointerEvents = 'none';
                 } else {
                     widgetGuide.style.opacity = '1';
-                    widgetGuide.style.pointerEvents = 'auto'; // Enable clicks
+                    widgetGuide.style.pointerEvents = 'auto';
                 }
             }
 
