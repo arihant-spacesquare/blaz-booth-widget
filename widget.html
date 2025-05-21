@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { MessageCircle } from 'lucide-react'; // Keep if used for internal UI, otherwise remove
-import { Card, CardContent } from '@/components/ui/card'; // Keep if you're using Shadcn UI Card component
+// The following imports are commented out as they were not explicitly used in the final minimalist design
+// import { MessageCircle } from 'lucide-react'; 
+// import { Card, CardContent } from '@/components/ui/card'; 
 
 const Index = () => {
   const [chatReady, setChatReady] = useState(false);
@@ -58,81 +59,113 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#1a1a1a]"> {/* Adjusted to #1a1a1a for consistency with Bläz theme */}
-      {/* Background effects (can be further customized for more "club lighting") */}
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4wMyIvPjwvc3ZnPg==')] opacity-30"></div> {/* Slightly reduced opacity */}
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#0a0a0e] text-white"> {/* Dark background, white text by default */}
+      {/* Background effects from image_896ec3.png */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==')] opacity-40"></div>
       
-      {/* Decorative glow effects that mimic club lighting */}
-      <div className="absolute top-1/4 left-1/4 h-80 w-80 rounded-full bg-purple-600/15 blur-[120px] animate-pulse-slow"></div> {/* Larger blur, slower pulse */}
-      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-blue-500/15 blur-[120px] animate-pulse-slow delay-500"></div>
-      <div className="absolute top-1/3 right-1/5 h-72 w-72 rounded-full bg-pink-500/10 blur-[100px] animate-pulse-slow delay-1000"></div>
+      {/* Decorative glow effects that mimic club lighting from image_896ec3.png */}
+      <div className="absolute top-20 left-1/4 h-64 w-64 rounded-full bg-purple-600/20 blur-[100px] animate-pulse"></div>
+      <div className="absolute bottom-12 right-1/3 h-80 w-80 rounded-full bg-blue-500/20 blur-[100px] animate-pulse"></div>
+      <div className="absolute top-1/3 right-1/4 h-56 w-56 rounded-full bg-pink-500/10 blur-[80px] animate-pulse"></div>
       
-      {/* Main content - Centered and using the new minimalist design */}
-      <div className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-16 text-white"> {/* Ensure text is white */}
-        <div className="text-center max-w-xl w-full"> {/* Simple div, removed Card for minimalist feel */}
-          <div className="mb-6 flex justify-center">
-            {/* Disco Ball Emoji: Directly related to nightlife/clubbing */}
-            <span className="text-[5em] mb-2 leading-none animate-bounce-subtle">&#127885;</span> 
+      {/* Main content - Centered within a card-like structure from image_896ec3.png */}
+      <div className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-16 z-10"> {/* Increased z-index to ensure content is above glows */}
+        <div className="max-w-lg w-full text-center p-8 rounded-2xl backdrop-blur-xl bg-black/30 border border-white/10 shadow-xl"> {/* Recreated Card-like style */}
+          <div className="pt-6">
+            <div className="mb-6 flex justify-center">
+              <div className="inline-flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-purple-600 via-blue-500 to-violet-500 shadow-lg shadow-purple-500/30 p-0.5">
+                <div className="h-full w-full rounded-full bg-black/80 flex items-center justify-center">
+                  <div className="h-14 w-14 relative">
+                    {/* Icon similar to image_896ec3.png - using a subtle, glowing abstract shape */}
+                    <svg viewBox="0 0 100 100" className="w-full h-full fill-current text-purple-400">
+                      <path d="M50 0 L100 25 L80 100 L20 100 L0 25 Z" fill="url(#blazGradient)" />
+                      <defs>
+                        <linearGradient id="blazGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" style={{stopColor: '#a78bfa', stopOpacity: 1}} /> {/* purple-400 */}
+                          <stop offset="50%" style={{stopColor: '#818cf8', stopOpacity: 1}} /> {/* blue-400 */}
+                          <stop offset="100%" style={{stopColor: '#c084fc', stopOpacity: 1}} /> {/* violet-400 */}
+                        </linearGradient>
+                      </defs>
+                      <circle cx="50" cy="50" r="20" fill="#ffffff" opacity="0.1" /> {/* Subtle inner glow */}
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <h1 className="font-playfair text-4xl font-bold mb-4 text-white tracking-tight">
+              Bläz VIP Booth Experience
+            </h1>
+            
+            <p className="text-gray-300 font-light text-lg mb-4 leading-relaxed">
+              This is your dedicated portal for requesting an exclusive VIP booth
+              for an upcoming <span className="bg-gradient-to-r from-purple-400 via-pink-500 to-blue-400 bg-clip-text text-transparent font-medium">Bläz Entertainment</span> event.
+            </p>
+            <p className="text-gray-300 font-light text-lg mb-8 leading-relaxed">
+              Simply chat with our AI assistant in the bottom right corner, and upon a successful request,
+              a Bläz team member will contact you shortly to confirm all details.
+            </p>
+            
+            <div className="flex flex-col items-center space-y-4">
+              <div className="w-32 h-1 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"></div>
+              <div className="text-sm text-gray-400 italic">
+                The ultimate social experience awaits you
+              </div>
+            </div>
           </div>
-          
-          <h1 className="font-playfair text-5xl font-bold mb-4 tracking-wider"> {/* Increased font size and tracking */}
-            Bläz Booth Agent
-          </h1>
-          
-          <p className="font-montserrat text-lg font-light leading-relaxed opacity-90 max-w-md mx-auto"> {/* Adjusted styling */}
-            Your ultimate portal for exclusive event booth reservations.
-          </p>
         </div>
       </div>
       
-      {/* Bottom right guide - Highly refined, no overlap, distinct font, elegant pointer */}
+      {/* Bottom right guide from image_896ec3.png with improved alignment and text */}
       <div 
-        className={`fixed z-[998] transition-all duration-700 ease-out 
-          ${guideVisible && chatReady ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
-          bottom-[60px] right-[120px]`} /* Exact positioning for no overlap */
-        style={{ pointerEvents: guideVisible ? 'auto' : 'none' }} /* Allow click only when visible */
+        className={`fixed bottom-28 right-8 z-[998] max-w-[180px] text-right transition-all duration-500 transform ${
+          guideVisible && chatReady ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+        }`}
       >
-        <div className="relative flex items-center justify-end"> {/* Use flexbox for alignment */}
-          <p className="font-bebas-neue text-blaz-accent text-xl tracking-widest leading-none drop-shadow-lg text-shadow-md">
-            CLICK TO INQUIRE
-          </p>
-          {/* Elegant pointer arrow */}
-          <div className="absolute w-10 h-10 right-[-30px] bottom-[-5px]"> {/* Position relative to the text */}
-            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute">
-              {/* Main line */}
-              <path d="M 10 90 L 90 10" stroke="#ffeb3b" strokeWidth="4" strokeLinecap="round" className="animate-draw-line" />
-              {/* Arrowhead */}
-              <path d="M 75 10 L 90 10 L 90 25" stroke="#ffeb3b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="animate-draw-line" />
+        <div className="relative">
+          <div className="bg-white/10 backdrop-blur-md p-3 rounded-lg border border-purple-500/30 shadow-lg shadow-purple-500/20">
+            <p className="text-sm font-medium text-white mb-1">
+              <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent font-bold">
+                CLICK HERE
+              </span>
+            </p>
+            <p className="text-xs text-gray-300">
+              Chat with our AI to request your VIP booth
+            </p>
+          </div>
+          {/* Arrow pointing to the chat bubble, similar to previous designs */}
+          <div className="absolute -bottom-5 -right-1 w-16 h-16 animate-pulse">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M22 42L42 22" stroke="#8B5CF6" strokeWidth="3" strokeLinecap="round"/>
+              <path d="M24 22H42V40" stroke="#8B5CF6" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </div>
         </div>
       </div>
       
+      {/* Pulsing chat button indicator ring - to draw attention */}
+      <div 
+        className={`fixed bottom-24 right-24 z-[997] w-16 h-16 rounded-full transition-all duration-500 ${
+          guideVisible && chatReady ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div className="absolute inset-0 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 opacity-70 animate-ping"></div>
+        <div className="absolute inset-2 rounded-full bg-gradient-to-r from-purple-600 to-blue-500 opacity-50 animate-pulse"></div>
+      </div>
+      
       {/* Custom styling for Dialogflow Messenger */}
       <style jsx>{`
-        /* Global font imports for Next.js/Tailwind CSS context */
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@400;700&family=Bebas+Neue&display=swap');
 
-        /* Utility classes for custom fonts */
         .font-playfair { font-family: 'Playfair Display', serif; }
         .font-montserrat { font-family: 'Montserrat', sans-serif; }
-        .font-cinzel { font-family: 'Cinzel', serif; } /* If you still want to use Cinzel elsewhere */
         .font-bebas-neue { font-family: 'Bebas Neue', sans-serif; }
 
-        /* Bläz accent color variable for consistency */
-        .text-blaz-accent { color: #ffeb3b; }
-        .bg-blaz-accent { background-color: #ffeb3b; }
-
-        /* Custom text shadow for glow effect */
-        .text-shadow-md {
-            text-shadow: 0px 0px 8px rgba(255, 235, 59, 0.7);
-        }
-
-        /* DF Messenger styling */
         df-messenger {
-          bottom: 24px; /* Matches fixed positioning in Tailwind */
-          right: 24px; /* Matches fixed positioning in Tailwind */
-          /* Overrides for default Dialogflow Messenger styles */
+          z-index: 999;
+          position: fixed;
+          bottom: 24px;
+          right: 24px;
           --df-messenger-font-family: 'Montserrat', sans-serif;
           --df-messenger-chat-background: #0a0a0e; /* Darker chat background */
           --df-messenger-message-user-background: #8B5CF6; /* Purple message background */
@@ -140,57 +173,39 @@ const Index = () => {
           --df-messenger-message-bot-background: #2a2a2a; /* Darker bot message background */
           --df-messenger-message-bot-color: #ffffff; /* White bot message color */
           --df-messenger-button-background-color: #ffeb3b; /* Accent button color */
-          --df-messenger-button-box-shadow: 0 4px 20px rgba(255, 235, 59, 0.4); /* Glow shadow for button */
-          --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.9); /* Stronger overall shadow */
+          --df-messenger-button-box-shadow: 0 4px 20px rgba(255, 235, 59, 0.4);
+          --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
           border-radius: 50%;
           transition: transform 0.3s ease-in-out;
-          --df-messenger-header-background: #1a1a1a; /* Dark header */
-          --df-messenger-header-font-color: #ffffff; /* White header text */
+          --df-messenger-header-background: #1a1a1a;
+          --df-messenger-header-font-color: #ffffff;
         }
 
-        /* Pulsing animation for the messenger button */
         df-messenger[data-ready="true"]::part(df-messenger-button) {
-          animation: pulseChatButton 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+          animation: pulseChatBubble 2s infinite;
         }
 
-        @keyframes pulseChatButton {
-          0%, 100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4);
-          }
-          50% {
-            transform: scale(1.05);
-            box-shadow: 0 0 0 15px rgba(255, 235, 59, 0);
-          }
+        @keyframes pulseChatBubble {
+          0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+          50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); }
+          100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); }
         }
 
-        /* Subtle glow pulse for background elements */
-        @keyframes animate-pulse-slow {
-          0%, 100% { opacity: 0.15; transform: scale(1); }
-          50% { opacity: 0.25; transform: scale(1.05); }
+        /* Add message styles within the chat */
+        df-messenger-message {
+          --df-messenger-message-border-radius: 12px;
+          --df-messenger-message-padding: 12px 16px;
         }
 
-        /* Disco ball subtle bounce */
+        /* Custom keyframes for glows and icon bounce */
+        @keyframes animate-pulse {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.02); }
+        }
+
         @keyframes bounce-subtle {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-5px); }
-        }
-
-        /* Line drawing animation for the pointer */
-        @keyframes draw-line {
-            0% {
-                stroke-dasharray: 0 100;
-                stroke-dashoffset: 0;
-            }
-            100% {
-                stroke-dasharray: 100 0;
-                stroke-dashoffset: 0;
-            }
-        }
-        
-        /* Apply line drawing animation to pointer SVG paths */
-        .animate-draw-line {
-            animation: draw-line 1.5s ease-out forwards 2s; /* Delayed to appear after text */
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
       `}</style>
     </div>
