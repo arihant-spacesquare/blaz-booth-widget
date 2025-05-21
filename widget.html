@@ -1,241 +1,200 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bläz Booth Request</title>
-    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #1a1a1a; /* Dark background from Bläz site */
-            color: #ffffff;
-            overflow: hidden; /* Prevent scrollbars */
-        }
+import React, { useEffect, useState, useRef } from 'react';
+import { MessageCircle } from 'lucide-react'; // Keep if used for internal UI, otherwise remove
+import { Card, CardContent } from '@/components/ui/card'; // Keep if you're using Shadcn UI Card component
 
-        /* Central Content - Focused on the "Bläz Booth Agent" screenshot style */
-        .blaz-central-content {
-            text-align: center;
-            max-width: 500px;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeInCentralContent 1s ease-out forwards 0.5s;
-        }
+const Index = () => {
+  const [chatReady, setChatReady] = useState(false);
+  const [guideVisible, setGuideVisible] = useState(true);
+  const dfMessengerRef = useRef(null); // Ref to hold the df-messenger element
 
-        .blaz-central-content .icon {
-            /* Using a disco ball emoji - directly related to nightlife/clubbing */
-            font-size: 5em; /* Very large and prominent */
-            margin-bottom: 5px; /* Tighter to the heading */
-            display: block;
-            line-height: 1; /* Ensures icon is centered vertically */
-        }
+  useEffect(() => {
+    // Initialize Dialogflow Messenger script
+    const script = document.createElement('script');
+    script.src = 'https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js';
+    script.async = true;
+    document.body.appendChild(script);
 
-        .blaz-central-content h1 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-            font-size: 2.8em;
-            color: #ffffff;
-            margin-bottom: 10px;
-            letter-spacing: 0.05em;
-        }
+    // Create and insert the df-messenger element
+    const dfMessenger = document.createElement('df-messenger');
+    dfMessenger.setAttribute('project-id', 'blaz-request-booth');
+    dfMessenger.setAttribute('agent-id', 'ad471477-3a50-4b3f-9d3a-3b52bf715469');
+    dfMessenger.setAttribute('language-code', 'en');
+    dfMessenger.setAttribute('max-query-length', '-1');
+    dfMessenger.setAttribute('id', 'df-messenger');
 
-        .blaz-central-content p {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 300;
-            font-size: 1.05em;
-            line-height: 1.5;
-            color: rgba(255, 255, 255, 0.95);
-            margin: 0 auto;
-            max-width: 95%;
-        }
+    // Create chat bubble element
+    const chatBubble = document.createElement('df-messenger-chat-bubble');
+    chatBubble.setAttribute('chat-title', 'Bläz Booth Agent');
+    dfMessenger.appendChild(chatBubble);
 
-        .blaz-central-content strong {
-            font-weight: 700;
-            color: #ffeb3b; /* Bläz accent color */
-        }
+    // Append df-messenger to body and set up event listeners
+    script.onload = () => {
+      document.body.appendChild(dfMessenger);
+      dfMessengerRef.current = dfMessenger; // Store ref to the actual DOM element
 
-        /* Dialogflow Messenger Widget Styling */
-        df-messenger {
-            z-index: 999;
-            position: fixed;
-            --df-messenger-font-color: #000;
-            --df-messenger-font-family: 'Montserrat', sans-serif;
-            --df-messenger-chat-background: #f3f6fc;
-            --df-messenger-message-user-background: #d3e3fd;
-            --df-messenger-message-bot-background: #fff;
-            bottom: 30px;
-            right: 30px;
-            cursor: pointer;
-            --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
-            border-radius: 50%;
-            transition: transform 0.3s ease-in-out;
-            --df-messenger-button-background-color: #1a73e8; /* Ensure blue button */
-        }
+      // Small delay to ensure messenger is fully rendered before setting ready
+      setTimeout(() => {
+        setChatReady(true);
+        // Add data-ready attribute for CSS animations
+        dfMessenger.setAttribute('data-ready', 'true');
+      }, 1000);
 
-        /* Bottom-Right Guide - Distinct, Pointing, NO OVERLAP */
-        .bottom-right-guide {
-            position: fixed;
-            /* Calculated to be precisely next to and slightly above the widget without overlap */
-            bottom: 60px; /* Aligns with the *top* of the chat bubble more */
-            right: 120px; /* Moves it significantly to the left of the chat bubble */
-            text-align: right;
-            z-index: 998;
-            pointer-events: none; /* Allows clicks to pass through to the widget */
-            opacity: 0;
-            transform: translateX(30px);
-            animation: slideInBottomRight 1s ease-out forwards 1.8s;
-        }
+      dfMessenger.addEventListener('df-messenger-opened', () => {
+        setGuideVisible(false);
+      });
 
-        .bottom-right-guide p {
-            margin: 0;
-            /* Distinct, bold font for high impact and contrast */
-            font-family: 'Bebas Neue', sans-serif; /* A bold, condensed sans-serif for striking contrast */
-            font-weight: 400; /* Bebas Neue is inherently bold */
-            font-size: 1.3em; /* Larger for easy reading */
-            color: #ffeb3b; /* High-contrast accent color */
-            line-height: 1; /* Tighter for a strong, modern look */
-            text-shadow: 0 0 10px rgba(255, 235, 59, 0.6); /* Prominent glow */
-            letter-spacing: 0.1em; /* Wider spacing for chic appeal */
-        }
+      dfMessenger.addEventListener('df-messenger-close', () => {
+        setGuideVisible(true);
+      });
+    };
 
-        /* Elegant and direct pointer */
-        .bottom-right-guide::after {
-            content: '';
-            position: absolute;
-            bottom: 10px; /* Position next to the text */
-            right: -25px; /* Extends from the right of the text */
-            width: 40px; /* Length of the pointer line */
-            height: 2px; /* Thickness of the line */
-            background-color: #ffeb3b; /* Accent colored line */
-            transform: rotate(-10deg); /* Slight upward angle to point at the bubble */
-            transform-origin: right center; /* Rotates from its right end */
-            box-shadow: 0 0 8px rgba(255, 235, 59, 0.6); /* Glow for the pointer */
-            opacity: 0;
-            animation: fadeInPointer 0.8s ease-out forwards 2.5s;
-        }
+    return () => {
+      // Clean up
+      document.body.removeChild(script);
+      if (dfMessengerRef.current && document.body.contains(dfMessengerRef.current)) {
+        document.body.removeChild(dfMessengerRef.current);
+      }
+    };
+  }, []);
 
-        /* Animations */
-        @keyframes fadeInCentralContent {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes slideInBottomRight {
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeInPointer {
-            to { opacity: 1; }
-        }
-
-        @keyframes pulseChatBubble {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
-            50% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255, 255, 255, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
-        }
-
-        df-messenger[data-ready="true"]::part(df-messenger-button) {
-            animation: pulseChatBubble 2s infinite;
-        }
-
-        /* Responsive adjustments for smaller screens */
-        @media (max-width: 768px) {
-            .blaz-central-content h1 {
-                font-size: 2em;
-            }
-            .blaz-central-content p {
-                font-size: 0.9em;
-            }
-            .blaz-central-content .icon {
-                font-size: 4em;
-            }
-            df-messenger {
-                bottom: 20px;
-                right: 20px;
-            }
-            .bottom-right-guide {
-                bottom: 80px; /* Adjust position for mobile */
-                right: 90px; /* Keep it left enough for mobile */
-            }
-            .bottom-right-guide p {
-                font-size: 1.1em;
-            }
-            .bottom-right-guide::after {
-                bottom: 5px;
-                right: -15px;
-                width: 30px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="blaz-central-content">
-        <span class="icon">&#127885;</span> <h1>Bläz Booth Agent</h1>
-        <p>
-            Your ultimate portal for event booth reservations.
-        </p>
-    </div>
-
-    <div class="bottom-right-guide" id="bottomRightGuide">
-        <p>
+  return (
+    <div className="relative min-h-screen w-full overflow-hidden bg-[#1a1a1a]"> {/* Adjusted to #1a1a1a for consistency with Bläz theme */}
+      {/* Background effects (can be further customized for more "club lighting") */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4wMyIvPjwvc3ZnPg==')] opacity-30"></div> {/* Slightly reduced opacity */}
+      
+      {/* Decorative glow effects that mimic club lighting */}
+      <div className="absolute top-1/4 left-1/4 h-80 w-80 rounded-full bg-purple-600/15 blur-[120px] animate-pulse-slow"></div> {/* Larger blur, slower pulse */}
+      <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-blue-500/15 blur-[120px] animate-pulse-slow delay-500"></div>
+      <div className="absolute top-1/3 right-1/5 h-72 w-72 rounded-full bg-pink-500/10 blur-[100px] animate-pulse-slow delay-1000"></div>
+      
+      {/* Main content - Centered and using the new minimalist design */}
+      <div className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-16 text-white"> {/* Ensure text is white */}
+        <div className="text-center max-w-xl w-full"> {/* Simple div, removed Card for minimalist feel */}
+          <div className="mb-6 flex justify-center">
+            {/* Disco Ball Emoji: Directly related to nightlife/clubbing */}
+            <span className="text-[5em] mb-2 leading-none animate-bounce-subtle">&#127885;</span> 
+          </div>
+          
+          <h1 className="font-playfair text-5xl font-bold mb-4 tracking-wider"> {/* Increased font size and tracking */}
+            Bläz Booth Agent
+          </h1>
+          
+          <p className="font-montserrat text-lg font-light leading-relaxed opacity-90 max-w-md mx-auto"> {/* Adjusted styling */}
+            Your ultimate portal for exclusive event booth reservations.
+          </p>
+        </div>
+      </div>
+      
+      {/* Bottom right guide - Highly refined, no overlap, distinct font, elegant pointer */}
+      <div 
+        className={`fixed z-[998] transition-all duration-700 ease-out 
+          ${guideVisible && chatReady ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}
+          bottom-[60px] right-[120px]`} /* Exact positioning for no overlap */
+        style={{ pointerEvents: guideVisible ? 'auto' : 'none' }} /* Allow click only when visible */
+      >
+        <div className="relative flex items-center justify-end"> {/* Use flexbox for alignment */}
+          <p className="font-bebas-neue text-blaz-accent text-xl tracking-widest leading-none drop-shadow-lg text-shadow-md">
             CLICK TO INQUIRE
-        </p>
-    </div>
+          </p>
+          {/* Elegant pointer arrow */}
+          <div className="absolute w-10 h-10 right-[-30px] bottom-[-5px]"> {/* Position relative to the text */}
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute">
+              {/* Main line */}
+              <path d="M 10 90 L 90 10" stroke="#ffeb3b" strokeWidth="4" strokeLinecap="round" className="animate-draw-line" />
+              {/* Arrowhead */}
+              <path d="M 75 10 L 90 10 L 90 25" stroke="#ffeb3b" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" className="animate-draw-line" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      {/* Custom styling for Dialogflow Messenger */}
+      <style jsx>{`
+        /* Global font imports for Next.js/Tailwind CSS context */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&family=Cinzel:wght@400;700&family=Bebas+Neue&display=swap');
 
-    <df-messenger
-        project-id="blaz-request-booth"
-        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
-        language-code="en"
-        max-query-length="-1"
-        id="df-messenger">
-        <df-messenger-chat-bubble chat-title="Bläz Booth Agent"></df-messenger-chat-bubble>
-    </df-messenger>
+        /* Utility classes for custom fonts */
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-cinzel { font-family: 'Cinzel', serif; } /* If you still want to use Cinzel elsewhere */
+        .font-bebas-neue { font-family: 'Bebas Neue', sans-serif; }
 
-    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+        /* Bläz accent color variable for consistency */
+        .text-blaz-accent { color: #ffeb3b; }
+        .bg-blaz-accent { background-color: #ffeb3b; }
 
-    <script>
-        window.addEventListener('load', function() {
-            const dfMessenger = document.getElementById('df-messenger');
-            const bottomRightGuide = document.getElementById('bottomRightGuide');
+        /* Custom text shadow for glow effect */
+        .text-shadow-md {
+            text-shadow: 0px 0px 8px rgba(255, 235, 59, 0.7);
+        }
 
-            if (dfMessenger) {
-                const waitForDfMessengerReady = setInterval(() => {
-                    const chatButton = dfMessenger.shadowRoot?.querySelector('df-messenger-chat-button') || dfMessenger.shadowRoot?.querySelector('df-messenger-chat-bubble');
+        /* DF Messenger styling */
+        df-messenger {
+          bottom: 24px; /* Matches fixed positioning in Tailwind */
+          right: 24px; /* Matches fixed positioning in Tailwind */
+          /* Overrides for default Dialogflow Messenger styles */
+          --df-messenger-font-family: 'Montserrat', sans-serif;
+          --df-messenger-chat-background: #0a0a0e; /* Darker chat background */
+          --df-messenger-message-user-background: #8B5CF6; /* Purple message background */
+          --df-messenger-message-user-color: white;
+          --df-messenger-message-bot-background: #2a2a2a; /* Darker bot message background */
+          --df-messenger-message-bot-color: #ffffff; /* White bot message color */
+          --df-messenger-button-background-color: #ffeb3b; /* Accent button color */
+          --df-messenger-button-box-shadow: 0 4px 20px rgba(255, 235, 59, 0.4); /* Glow shadow for button */
+          --df-messenger-chat-bubble-shadow: 0 8px 30px rgba(0, 0, 0, 0.9); /* Stronger overall shadow */
+          border-radius: 50%;
+          transition: transform 0.3s ease-in-out;
+          --df-messenger-header-background: #1a1a1a; /* Dark header */
+          --df-messenger-header-font-color: #ffffff; /* White header text */
+        }
 
-                    if (chatButton) {
-                        clearInterval(waitForDfMessengerReady);
+        /* Pulsing animation for the messenger button */
+        df-messenger[data-ready="true"]::part(df-messenger-button) {
+          animation: pulseChatButton 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+        }
 
-                        dfMessenger.setAttribute('data-ready', 'true'); // Triggers pulse animation
+        @keyframes pulseChatButton {
+          0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(255, 235, 59, 0.4);
+          }
+          50% {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 15px rgba(255, 235, 59, 0);
+          }
+        }
 
-                        // Hide the instruction when the chat is opened
-                        dfMessenger.addEventListener('df-messenger-opened', () => {
-                            bottomRightGuide.style.opacity = '0';
-                            bottomRightGuide.style.pointerEvents = 'none';
-                        });
+        /* Subtle glow pulse for background elements */
+        @keyframes animate-pulse-slow {
+          0%, 100% { opacity: 0.15; transform: scale(1); }
+          50% { opacity: 0.25; transform: scale(1.05); }
+        }
 
-                        // Show the instruction again if the chat is closed
-                        dfMessenger.addEventListener('df-messenger-close', () => {
-                            bottomRightGuide.style.opacity = '1';
-                            bottomRightGuide.style.pointerEvents = 'auto';
-                            bottomRightGuide.style.animation = 'slideInBottomRight 1s ease-out forwards';
-                        });
-                    }
-                }, 100);
-            } else {
-                console.error('df-messenger element not found');
+        /* Disco ball subtle bounce */
+        @keyframes bounce-subtle {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-5px); }
+        }
+
+        /* Line drawing animation for the pointer */
+        @keyframes draw-line {
+            0% {
+                stroke-dasharray: 0 100;
+                stroke-dashoffset: 0;
             }
-        });
-    </script>
-</body>
-</html>
+            100% {
+                stroke-dasharray: 100 0;
+                stroke-dashoffset: 0;
+            }
+        }
+        
+        /* Apply line drawing animation to pointer SVG paths */
+        .animate-draw-line {
+            animation: draw-line 1.5s ease-out forwards 2s; /* Delayed to appear after text */
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export default Index;
