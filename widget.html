@@ -325,10 +325,9 @@
                 font-size: 1em;
             }
 
-            /* >>> THIS IS THE CRITICAL CHANGE <<< */
-            /* Hide "CLICK BELOW" on very small screens */
+            /* >>> THIS IS THE CRITICAL CHANGE TO HIDE THE TEXT <<< */
             .widget-guide-highlight {
-                display: none; /* This should hide the text */
+                display: none !important; /* Force hide the text on mobile */
             }
 
             /* Adjust widget guide for smartphones */
@@ -336,24 +335,23 @@
                 left: 50%;
                 transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position */
                 right: auto;
-                bottom: 75px; /* Fine-tune vertical position */
-                max-width: 160px;
+                bottom: 70px; /* Slightly lower position to look better without "CLICK BELOW" */
+                max-width: 150px; /* Make it even narrower */
                 /* Adjust padding now that highlight is gone */
-                padding: 10px 12px; /* Slightly more vertical padding */
-                font-size: 0.75em;
+                padding: 8px 10px; /* Reduced vertical and horizontal padding */
+                font-size: 0.7em; /* Even smaller font for remaining text */
                 border-radius: 8px;
             }
             
             /* Adjust margin for icon now that highlight text is gone */
             .widget-guide-icon {
-                margin-bottom: 0; /* Remove bottom margin to bring text closer if only text left */
-                width: 24px;
-                height: 24px;
+                margin-bottom: 5px; /* Add a small margin to separate icon from text */
+                width: 22px;
+                height: 22px;
             }
             
-            /* If the text is the only thing left, make sure it has some vertical padding */
             .widget-guide-text {
-                margin-top: 5px; /* Add a small top margin if needed after icon */
+                margin-top: 0; /* Ensure no extra top margin from previous rules */
             }
 
             /* Adjust df-messenger positioning for very small screens if needed */
