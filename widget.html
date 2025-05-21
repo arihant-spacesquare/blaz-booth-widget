@@ -210,17 +210,18 @@
         }
 
         .widget-guide-text {
-            margin: 0;
+            margin: 0; /* Reset margins */
             color: rgba(255, 255, 255, 0.9);
             font-weight: 300;
         }
 
+        /* This rule now only exists for desktop via JS, no need for display:none here */
         .widget-guide-highlight {
             font-weight: bold;
             color: #8B5CF6;
             font-size: 1.1em;
             margin-bottom: 5px;
-            display: block; /* Visible by default on desktop */
+            display: block; /* Ensure it behaves as a block element */
         }
 
         .widget-guide-icon {
@@ -281,11 +282,8 @@
                 padding: 12px 18px;
                 font-size: 0.85em;
             }
-
-            .widget-guide-highlight {
-                font-size: 1.05em;
-            }
-
+            /* The highlight element will be added via JS on desktop, so no need to hide here */
+            /* .widget-guide-highlight { font-size: 1.05em; } */ 
             .widget-guide-icon {
                 width: 28px;
                 height: 28px;
@@ -325,25 +323,19 @@
                 font-size: 1em;
             }
 
-            /* >>> THIS IS THE CRITICAL CHANGE TO HIDE THE TEXT <<< */
-            .widget-guide-highlight {
-                display: none !important; /* Force hide the text on mobile */
-            }
-
-            /* Adjust widget guide for smartphones */
+            /* Adjust widget guide for smartphones now that "CLICK BELOW" is not in HTML */
             .widget-guide {
                 left: 50%;
                 transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position */
                 right: auto;
-                bottom: 70px; /* Slightly lower position to look better without "CLICK BELOW" */
+                bottom: 70px; /* Fine-tune vertical position */
                 max-width: 150px; /* Make it even narrower */
-                /* Adjust padding now that highlight is gone */
                 padding: 8px 10px; /* Reduced vertical and horizontal padding */
                 font-size: 0.7em; /* Even smaller font for remaining text */
                 border-radius: 8px;
             }
             
-            /* Adjust margin for icon now that highlight text is gone */
+            /* Adjust margin for icon now that highlight text is completely absent */
             .widget-guide-icon {
                 margin-bottom: 5px; /* Add a small margin to separate icon from text */
                 width: 22px;
@@ -397,7 +389,6 @@
         <svg class="widget-guide-icon" viewBox="0 0 24 24">
             <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
-        <span class="widget-guide-highlight">CLICK BELOW</span>
         <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
     </div>
 
@@ -417,7 +408,41 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dfMessenger = document.querySelector('df-messenger');
             const widgetGuide = document.getElementById('widgetGuide');
+            const mobileBreakpoint = 480; // Define your mobile breakpoint (same as in CSS)
 
+            // Function to add/remove "CLICK BELOW" based on screen size
+            function manageClickBelowText() {
+                const existingHighlight = widgetGuide.querySelector('.widget-guide-highlight');
+
+                if (window.innerWidth > mobileBreakpoint) {
+                    // Desktop size: Add "CLICK BELOW" if not already present
+                    if (!existingHighlight) {
+                        const highlightSpan = document.createElement('span');
+                        highlightSpan.classList.add('widget-guide-highlight');
+                        highlightSpan.textContent = 'CLICK BELOW';
+                        // Insert it right after the icon
+                        widgetGuide.insertBefore(highlightSpan, widgetGuide.querySelector('.widget-guide-text'));
+                        
+                        // Adjust margin for icon when highlight is present
+                        const icon = widgetGuide.querySelector('.widget-guide-icon');
+                        if (icon) {
+                            icon.style.marginBottom = '10px'; // Desktop margin
+                        }
+                    }
+                } else {
+                    // Mobile size: Remove "CLICK BELOW" if present
+                    if (existingHighlight) {
+                        existingHighlight.remove();
+                        // Reset margin for icon when highlight is removed
+                        const icon = widgetGuide.querySelector('.widget-guide-icon');
+                        if (icon) {
+                            icon.style.marginBottom = '5px'; // Mobile margin
+                        }
+                    }
+                }
+            }
+
+            // Function to show/hide the guide based on messenger state
             function toggleGuide() {
                 if (dfMessenger.opened) {
                     widgetGuide.style.opacity = '0';
@@ -428,8 +453,18 @@
                 }
             }
 
+            // Initial calls on load
+            manageClickBelowText(); // Set text initially based on screen size
             toggleGuide();
 
+            // Listen for window resize to re-evaluate "CLICK BELOW" text
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(manageClickBelowText, 100); // Debounce resize
+            });
+
+            // Listen for when the df-messenger opens or closes
             dfMessenger.addEventListener('df-messenger-loaded', function () {
                 dfMessenger.addEventListener('df-messenger-opened', toggleGuide);
                 dfMessenger.addEventListener('df-messenger-closed', toggleGuide);
