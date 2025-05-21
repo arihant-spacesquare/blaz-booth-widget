@@ -178,69 +178,6 @@
             right: 16px;
         }
 
-        /* Guide box styling */
-        .widget-guide {
-            position: fixed;
-            bottom: 110px; /* Default for desktop */
-            right: 15px;  /* Default for desktop */
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #ffffff;
-            padding: 10px 15px; /* Adjusted padding for no "CLICK BELOW" text */
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-            max-width: 200px; /* Adjusted max-width */
-            text-align: center;
-            font-size: 0.9em;
-            line-height: 1.4;
-            z-index: 998;
-            transition: opacity 0.3s ease-in-out;
-            opacity: 1;
-            pointer-events: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid transparent;
-            animation: pulseBorderGlow 2s infinite alternate;
-        }
-
-        @keyframes pulseBorderGlow {
-            0% { border-color: rgba(139, 92, 246, 0.4); box-shadow: 0 0 10px rgba(139, 92, 246, 0.6); }
-            100% { border-color: rgba(139, 92, 246, 0.8); box-shadow: 0 0 20px rgba(139, 92, 246, 1); }
-        }
-
-        .widget-guide-text {
-            margin: 0;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-        }
-
-        /* This rule is now effectively for an element that doesn't exist, but leaving it won't hurt */
-        .widget-guide-highlight {
-            display: none; /* Ensure it's never visible if somehow re-added */
-        }
-
-        .widget-guide-icon {
-            width: 28px; /* Slightly smaller icon */
-            height: 28px; /* Slightly smaller icon */
-            margin-bottom: 5px; /* Reduced margin to bring text closer */
-            stroke: #8B5CF6;
-            stroke-width: 2;
-            fill: none;
-            animation: pulseIconGlow 2s infinite alternate;
-        }
-
-        @keyframes pulseIconGlow {
-            0% { stroke-opacity: 0.6; transform: scale(1); }
-            100% { stroke-opacity: 1; transform: scale(1.1); }
-        }
-
-        /* Hide guide when the df-messenger is open */
-        df-messenger[opened] ~ .widget-guide {
-            opacity: 0;
-            pointer-events: none;
-        }
-
         /* ******************************************* */
         /* RESPONSIVE DESIGN - MEDIA QUERIES (simplified for mobile) */
         /* ******************************************* */
@@ -268,21 +205,6 @@
             .blaz-icon {
                 height: 50px;
                 width: 50px;
-            }
-
-            /* Adjust widget guide for tablets/smaller desktops */
-            .widget-guide {
-                bottom: 85px; /* Adjust vertical position for tablets */
-                right: 10px;
-                max-width: 180px; /* Make it a bit narrower */
-                padding: 8px 12px; /* Reduce padding */
-                font-size: 0.8em;
-            }
-
-            .widget-guide-icon {
-                width: 26px;
-                height: 26px;
-                margin-bottom: 4px;
             }
         }
 
@@ -317,24 +239,6 @@
 
             .instruction-main {
                 font-size: 1em;
-            }
-
-            /* Adjust widget guide for smartphones */
-            .widget-guide {
-                left: 50%;
-                transform: translateX(calc(-50% + 18px)); /* Fine-tune horizontal position to right of center */
-                right: auto; /* Override fixed right */
-                bottom: 65px; /* Adjust vertical position */
-                max-width: 140px; /* Make it quite compact */
-                padding: 6px 8px; /* Further reduced padding */
-                font-size: 0.7em;
-                border-radius: 6px;
-            }
-            
-            .widget-guide-icon {
-                margin-bottom: 3px; /* Minimal margin */
-                width: 20px;
-                height: 20px;
             }
 
             /* Adjust df-messenger positioning for very small screens if needed */
@@ -376,13 +280,6 @@
         <p class="tagline-bottom">The ultimate nightlife experience awaits you</p>
     </div>
 
-    <div class="widget-guide" id="widgetGuide">
-        <svg class="widget-guide-icon" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
-        </svg>
-        <p class="widget-guide-text">Chat with our AI to request your VIP booth</p>
-    </div>
-
     <df-messenger
         project-id="blaz-request-booth"
         agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
@@ -396,30 +293,8 @@
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const dfMessenger = document.querySelector('df-messenger');
-            const widgetGuide = document.getElementById('widgetGuide');
-
-            // Function to show/hide the guide based on messenger state
-            function toggleGuide() {
-                if (dfMessenger.opened) {
-                    widgetGuide.style.opacity = '0';
-                    widgetGuide.style.pointerEvents = 'none';
-                } else {
-                    widgetGuide.style.opacity = '1';
-                    widgetGuide.style.pointerEvents = 'auto';
-                }
-            }
-
-            // Initial calls on load
-            toggleGuide();
-
-            // Listen for when the df-messenger opens or closes
-            dfMessenger.addEventListener('df-messenger-loaded', function () {
-                dfMessenger.addEventListener('df-messenger-opened', toggleGuide);
-                dfMessenger.addEventListener('df-messenger-closed', toggleGuide);
-            });
-        });
+        // All JavaScript related to the widgetGuide has been REMOVED.
+        // The df-messenger will still function as before.
     </script>
 </body>
 </html>
