@@ -188,24 +188,10 @@
                 margin: 15px auto;
                 width: 90%;
             }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            p {
-                font-size: 0.95em;
-            }
-
-            .blaz-logo-circle {
-                height: 70px;
-                width: 70px;
-            }
-
-            .blaz-icon {
-                height: 50px;
-                width: 50px;
-            }
+            h1 { font-size: 2em; }
+            p { font-size: 0.95em; }
+            .blaz-logo-circle { height: 70px; width: 70px; }
+            .blaz-icon { height: 50px; width: 50px; }
         }
 
         @media (max-width: 480px) { /* Smartphones */
@@ -214,38 +200,13 @@
                 margin: 10px auto;
                 width: 95%;
             }
-
-            h1 {
-                font-size: 1.6em;
-            }
-
-            p {
-                font-size: 0.9em;
-            }
-
-            .blaz-logo-circle {
-                height: 50px;
-                width: 50px;
-            }
-
-            .blaz-logo-inner {
-                padding: 1px;
-            }
-
-            .blaz-icon {
-                height: 35px;
-                width: 35px;
-            }
-
-            .instruction-main {
-                font-size: 1em;
-            }
-
-            /* Adjust df-messenger positioning for very small screens if needed */
-            df-messenger {
-                bottom: 10px;
-                right: 10px;
-            }
+            h1 { font-size: 1.6em; }
+            p { font-size: 0.9em; }
+            .blaz-logo-circle { height: 50px; width: 50px; }
+            .blaz-logo-inner { padding: 1px; }
+            .blaz-icon { height: 35px; width: 35px; }
+            .instruction-main { font-size: 1em; }
+            df-messenger { bottom: 10px; right: 10px; }
         }
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
@@ -284,8 +245,8 @@
         project-id="blaz-request-booth"
         agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
         language-code="en"
-        max-query-length="-1"
-        intent="WELCOME">  <df-messenger-chat-bubble
+        max-query-length="-1">
+        <df-messenger-chat-bubble
             chat-title="Bläz booth agent">
         </df-messenger-chat-bubble>
     </df-messenger>
@@ -293,10 +254,52 @@
     <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
     
     <script>
-        // All JavaScript related to the widgetGuide has been REMOVED.
-        // The df-messenger will still function as before.
-        // No additional JavaScript is needed for the welcome message if using the intent="WELCOME" attribute
-        // and your Dialogflow agent has a "WELCOME" intent configured with responses.
+    document.addEventListener('DOMContentLoaded', () => {
+      const dfMessenger = document.querySelector('df-messenger');
+
+      if (dfMessenger) {
+        let welcomeTriggeredOnOpen = false;
+
+        dfMessenger.addEventListener('df-messenger-chat-opened', () => {
+          if (!welcomeTriggeredOnOpen) {
+            console.log('Chat opened by user. Attempting to trigger WELCOME event via startNewConversation.');
+            
+            // Use a small timeout to ensure the messenger's API is fully ready after expansion
+            setTimeout(() => {
+              try {
+                if (typeof dfMessenger.startNewConversation === 'function') {
+                  // For Dialogflow ES, the event 'WELCOME' is standard.
+                  // For Dialogflow CX, this will initiate the default start flow,
+                  // and the 'event' parameter might be ignored or used if specific start event handlers are set up.
+                  dfMessenger.startNewConversation({ event: 'WELCOME' });
+                  console.log('dfMessenger.startNewConversation({ event: "WELCOME" }) called.');
+                  welcomeTriggeredOnOpen = true; // Mark as triggered to avoid re-triggering if user closes/opens
+                } else {
+                  console.warn('dfMessenger.startNewConversation() method not found. Welcome message may not trigger as expected via JS.');
+                  // As a fallback, if the above doesn't work, and if you have a simple phrase for your welcome intent:
+                  // if (typeof dfMessenger.sendRequest === 'function') {
+                  //   console.log("Attempting dfMessenger.sendRequest('query', 'Hi') as a fallback.");
+                  //   dfMessenger.sendRequest('query', 'Hi'); // Replace 'Hi' with a phrase that triggers your welcome
+                  //   welcomeTriggeredOnOpen = true;
+                  // }
+                }
+              } catch (error) {
+                console.error('Error attempting to trigger welcome message via JavaScript:', error);
+                welcomeTriggeredOnOpen = true; // Avoid retrying on error
+              }
+            }, 150); // 150ms delay
+          }
+        });
+
+        // Optional: Log if the messenger element itself loads successfully
+        dfMessenger.addEventListener('df-messenger-loaded', () => {
+            console.log('df-messenger fully loaded.');
+        });
+
+      } else {
+        console.error('Dialogflow Messenger element (df-messenger) not found in the DOM.');
+      }
+    });
     </script>
 </body>
 </html>
