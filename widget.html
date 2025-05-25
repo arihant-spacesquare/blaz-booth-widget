@@ -27,7 +27,7 @@
             position: relative; /* For absolute positioning of background elements */
         }
 
-        /* Background effects */
+        /* Background effects (styles remain the same) */
         body::before {
             content: '';
             position: absolute;
@@ -178,28 +178,16 @@
             right: 16px;
         }
 
-        /* ******************************************* */
-        /* RESPONSIVE DESIGN - MEDIA QUERIES (simplified for mobile) */
-        /* ******************************************* */
-
+        /* Media Queries (styles remain the same) */
         @media (max-width: 768px) { /* Tablets and smaller */
-            .blaz-content-box {
-                padding: 25px;
-                margin: 15px auto;
-                width: 90%;
-            }
+            .blaz-content-box { padding: 25px; margin: 15px auto; width: 90%; }
             h1 { font-size: 2em; }
             p { font-size: 0.95em; }
             .blaz-logo-circle { height: 70px; width: 70px; }
             .blaz-icon { height: 50px; width: 50px; }
         }
-
         @media (max-width: 480px) { /* Smartphones */
-            .blaz-content-box {
-                padding: 20px;
-                margin: 10px auto;
-                width: 95%;
-            }
+            .blaz-content-box { padding: 20px; margin: 10px auto; width: 95%; }
             h1 { font-size: 1.6em; }
             p { font-size: 0.9em; }
             .blaz-logo-circle { height: 50px; width: 50px; }
@@ -258,46 +246,51 @@
       const dfMessenger = document.querySelector('df-messenger');
 
       if (dfMessenger) {
-        let welcomeTriggeredOnOpen = false;
+        dfMessenger.addEventListener('df-messenger-loaded', () => {
+          console.log('df-messenger-loaded event fired. Messenger is ready.');
+          let welcomeAttemptedOnOpen = false;
 
-        dfMessenger.addEventListener('df-messenger-chat-opened', () => {
-          if (!welcomeTriggeredOnOpen) {
-            console.log('Chat opened by user. Attempting to trigger WELCOME event via startNewConversation.');
-            
-            // Use a small timeout to ensure the messenger's API is fully ready after expansion
-            setTimeout(() => {
+          dfMessenger.addEventListener('df-messenger-chat-opened', () => {
+            console.log('df-messenger-chat-opened event fired.');
+            if (!welcomeAttemptedOnOpen) {
+              console.log('Chat opened by user. Attempting to send WELCOME event.');
+              
               try {
-                if (typeof dfMessenger.startNewConversation === 'function') {
-                  // For Dialogflow ES, the event 'WELCOME' is standard.
-                  // For Dialogflow CX, this will initiate the default start flow,
-                  // and the 'event' parameter might be ignored or used if specific start event handlers are set up.
-                  dfMessenger.startNewConversation({ event: 'WELCOME' });
-                  console.log('dfMessenger.startNewConversation({ event: "WELCOME" }) called.');
-                  welcomeTriggeredOnOpen = true; // Mark as triggered to avoid re-triggering if user closes/opens
-                } else {
-                  console.warn('dfMessenger.startNewConversation() method not found. Welcome message may not trigger as expected via JS.');
-                  // As a fallback, if the above doesn't work, and if you have a simple phrase for your welcome intent:
-                  // if (typeof dfMessenger.sendRequest === 'function') {
-                  //   console.log("Attempting dfMessenger.sendRequest('query', 'Hi') as a fallback.");
-                  //   dfMessenger.sendRequest('query', 'Hi'); // Replace 'Hi' with a phrase that triggers your welcome
-                  //   welcomeTriggeredOnOpen = true;
-                  // }
-                }
-              } catch (error) {
-                console.error('Error attempting to trigger welcome message via JavaScript:', error);
-                welcomeTriggeredOnOpen = true; // Avoid retrying on error
+                // Using sendRequest to send an event to Dialogflow (ES or CX)
+                // Ensure your agent (ES or CX) is configured to handle an event named "WELCOME"
+                // and respond with your desired welcome messages.
+                dfMessenger.sendRequest('event', 'WELCOME')
+                  .then(() => {
+                    console.log("dfMessenger.sendRequest('event', 'WELCOME') successfully called.");
+                  })
+                  .catch((error) => {
+                    console.error("Error from dfMessenger.sendRequest('event', 'WELCOME'):", error);
+                  });
+                welcomeAttemptedOnOpen = true; 
+              } catch (syncError) {
+                // This catch block is for synchronous errors if sendRequest itself throws one immediately.
+                console.error('Synchronous error calling dfMessenger.sendRequest:', syncError);
+                welcomeAttemptedOnOpen = true; // Prevent retries on sync error
               }
-            }, 150); // 150ms delay
-          }
+            } else {
+              console.log('Chat re-opened by user, welcome event already attempted for this session load.');
+            }
+          });
         });
 
-        // Optional: Log if the messenger element itself loads successfully
-        dfMessenger.addEventListener('df-messenger-loaded', () => {
-            console.log('df-messenger fully loaded.');
+        // Optional: Listen for other events for debugging if needed
+        dfMessenger.addEventListener('df-event', (event) => {
+          console.log('df-event received:', event.detail);
+        });
+        dfMessenger.addEventListener('df-response-received', (event) => {
+          console.log('df-response-received:', event.detail);
+        });
+        dfMessenger.addEventListener('df-error', (event) => {
+          console.error('df-error event:', event.detail);
         });
 
       } else {
-        console.error('Dialogflow Messenger element (df-messenger) not found in the DOM.');
+        console.error('df-messenger element not found in the DOM.');
       }
     });
     </script>
