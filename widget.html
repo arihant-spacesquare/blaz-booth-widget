@@ -165,6 +165,49 @@
             margin-top: 15px;
         }
 
+        /* Chat prompt styling */
+        .chat-prompt {
+            position: fixed;
+            bottom: 80px;
+            right: 16px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(59, 130, 246, 0.9));
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 280px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 998;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .chat-prompt::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 20px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(139, 92, 246, 0.9);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         /* Dialogflow Messenger Widget Styling */
         df-messenger {
             z-index: 999;
@@ -178,13 +221,20 @@
             right: 16px;
         }
 
-        /* Media Queries (styles remain the same) */
+        /* Media Queries */
         @media (max-width: 768px) { /* Tablets and smaller */
             .blaz-content-box { padding: 25px; margin: 15px auto; width: 90%; }
             h1 { font-size: 2em; }
             p { font-size: 0.95em; }
             .blaz-logo-circle { height: 70px; width: 70px; }
             .blaz-icon { height: 50px; width: 50px; }
+            .chat-prompt {
+                bottom: 75px;
+                right: 12px;
+                max-width: 250px;
+                font-size: 13px;
+                padding: 10px 14px;
+            }
         }
         @media (max-width: 480px) { /* Smartphones */
             .blaz-content-box { padding: 20px; margin: 10px auto; width: 95%; }
@@ -195,6 +245,16 @@
             .blaz-icon { height: 35px; width: 35px; }
             .instruction-main { font-size: 1em; }
             df-messenger { bottom: 10px; right: 10px; }
+            .chat-prompt {
+                bottom: 70px;
+                right: 10px;
+                max-width: 220px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+            .chat-prompt::after {
+                right: 16px;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
@@ -227,6 +287,11 @@
         
         <div class="divider"></div>
         <p class="tagline-bottom">The ultimate nightlife experience awaits you</p>
+    </div>
+
+    <!-- Chat prompt above widget -->
+    <div class="chat-prompt">
+        Click and type to get started with our booth agent!
     </div>
 
     <df-messenger
