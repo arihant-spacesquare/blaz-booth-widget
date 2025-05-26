@@ -1,143 +1,298 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bläz VIP Booth Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* Universal box-sizing for easier layout calculations */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
 
-interface Message {
-  id: string;
-  text: string;
-  isBot: boolean;
-  timestamp: Date;
-}
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0a0a0e; /* Dark background */
+            color: #ffffff;
+            overflow-x: hidden; /* Prevent horizontal scrollbars */
+            position: relative; /* For absolute positioning of background elements */
+        }
 
-interface ChatWidgetProps {
-  isOpen: boolean;
-  onToggle: (open: boolean) => void;
-}
+        /* Background effects (styles remain the same) */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxIiBjeT0iMSIgcj0iMSIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC4wNSIvPjwvc3ZnPg==');
+            opacity: 0.4;
+            z-index: 0;
+        }
 
-const ChatWidget: React.FC<ChatWidgetProps> = ({ isOpen, onToggle }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
-  const [hasShownWelcome, setHasShownWelcome] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+        .glow-1 {
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            height: 250px;
+            width: 250px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.2);
+            filter: blur(100px);
+            animation: pulseGlow 4s infinite alternate;
+            z-index: 0;
+        }
 
-  const welcomeMessage = "Hi! I'm here to help you request a booth for a Bläz Entertainment event. Please stay with me through the full process so your request is properly submitted. Let's get started—what's your full name?";
+        .glow-3 {
+            position: absolute;
+            top: 30%;
+            right: 20%;
+            height: 200px;
+            width: 200px;
+            border-radius: 50%;
+            background: rgba(236, 72, 153, 0.1);
+            filter: blur(80px);
+            animation: pulseGlow 3s infinite alternate;
+            z-index: 0;
+        }
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.05); opacity: 0.3; }
+            100% { transform: scale(1); opacity: 0.2; }
+        }
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+        .blaz-content-box {
+            text-align: center;
+            padding: 40px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            max-width: 500px; /* Max width for desktop */
+            width: calc(100% - 40px); /* Responsive width for mobile */
+            margin: 20px auto; /* Center horizontally, add vertical margin */
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
 
-  useEffect(() => {
-    if (isOpen && !hasShownWelcome) {
-      const welcomeMsg: Message = {
-        id: 'welcome-1',
-        text: welcomeMessage,
-        isBot: true,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMsg]);
-      setHasShownWelcome(true);
-    }
-  }, [isOpen, hasShownWelcome]);
+        .blaz-logo-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
 
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return;
+        .blaz-logo-circle {
+            display: inline-flex;
+            height: 80px;
+            width: 80px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: linear-gradient(to right, #8B5CF6, #3B82F6, #A78BFA);
+            padding: 2px;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      text: inputValue,
-      isBot: false,
-      timestamp: new Date(),
-    };
+        .blaz-logo-inner {
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
+        .blaz-icon {
+            height: 56px;
+            width: 56px;
+            color: #A78BFA;
+            fill: currentColor;
+        }
 
-    // Here you would integrate with your GCP Dialogflow agent
-    // For now, this is a placeholder response
-    setTimeout(() => {
-      const botResponse: Message = {
-        id: `bot-${Date.now()}`,
-        text: "Thank you! This will connect to your GCP Dialogflow agent to continue the booth request process.",
-        isBot: true,
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, botResponse]);
-    }, 1000);
-  };
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 2.5em;
+            color: #ffffff;
+            margin-bottom: 15px;
+            letter-spacing: 0.05em;
+        }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSendMessage();
-    }
-  };
+        p {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 300;
+            font-size: 1em;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+        }
 
-  return (
-    <>
-      {/* Chat bubble */}
-      <Button
-        onClick={() => onToggle(!isOpen)}
-        className="fixed bottom-4 right-4 h-14 w-14 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 shadow-lg shadow-purple-500/25 z-50"
-      >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-      </Button>
+        .highlight-gradient {
+            background: linear-gradient(to right, #a78bfa, #f472b6, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 500;
+        }
 
-      {/* Chat window */}
-      {isOpen && (
-        <div className="fixed bottom-20 right-4 w-80 h-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col z-40">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-purple-500 to-blue-500 text-white p-4 rounded-t-lg">
-            <h3 className="font-semibold">Bläz Booth Agent</h3>
-            <p className="text-sm opacity-90">Online</p>
-          </div>
+        .instruction-main {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #ffffff;
+            margin-top: 20px;
+        }
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
-            {messages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.isBot ? 'justify-start' : 'justify-end'}`}
-              >
-                <div
-                  className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
-                    message.isBot
-                      ? 'bg-gray-100 text-gray-800'
-                      : 'bg-gradient-to-r from-purple-500 to-blue-500 text-white'
-                  }`}
-                >
-                  {message.text}
+        .divider {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(to right, #8B5CF6, #3B82F6);
+            border-radius: 2px;
+            margin: 20px auto;
+        }
+
+        .tagline-bottom {
+            font-size: 0.9em;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 15px;
+        }
+
+        /* Dialogflow Messenger Widget Styling */
+        df-messenger {
+            z-index: 999;
+            position: fixed;
+            --df-messenger-font-color: #000;
+            --df-messenger-font-family: Google Sans;
+            --df-messenger-chat-background: #f3f6fc;
+            --df-messenger-message-user-background: #d3e3fd;
+            --df-messenger-message-bot-background: #fff;
+            bottom: 16px;
+            right: 16px;
+        }
+
+        /* Media Queries (styles remain the same) */
+        @media (max-width: 768px) { /* Tablets and smaller */
+            .blaz-content-box { padding: 25px; margin: 15px auto; width: 90%; }
+            h1 { font-size: 2em; }
+            p { font-size: 0.95em; }
+            .blaz-logo-circle { height: 70px; width: 70px; }
+            .blaz-icon { height: 50px; width: 50px; }
+        }
+        @media (max-width: 480px) { /* Smartphones */
+            .blaz-content-box { padding: 20px; margin: 10px auto; width: 95%; }
+            h1 { font-size: 1.6em; }
+            p { font-size: 0.9em; }
+            .blaz-logo-circle { height: 50px; width: 50px; }
+            .blaz-logo-inner { padding: 1px; }
+            .blaz-icon { height: 35px; width: 35px; }
+            .instruction-main { font-size: 1em; }
+            df-messenger { bottom: 10px; right: 10px; }
+        }
+    </style>
+    <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+</head>
+<body>
+    <div class="glow-1"></div>
+    <div class="glow-3"></div>
+
+    <div class="blaz-content-box">
+        <div class="blaz-logo-container">
+            <div class="blaz-logo-circle">
+                <div class="blaz-logo-inner">
+                    <svg class="blaz-icon" viewBox="0 0 100 100">
+                        <path d="M50 0 L100 25 L80 100 L20 100 L0 25 Z" fill="url(#blazGradient)" />
+                        <defs>
+                            <linearGradient id="blazGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#a78bfa; stop-opacity:1" /> <stop offset="50%" style="stop-color:#818cf8; stop-opacity:1" /> <stop offset="100%" style="stop-color:#c084fc; stop-opacity:1" /> </linearGradient>
+                        </defs>
+                        <circle cx="50" cy="50" r="20" fill="#ffffff" opacity="0.1" />
+                    </svg>
                 </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input */}
-          <div className="p-4 border-t border-gray-200">
-            <div className="flex space-x-2">
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Type your message..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-800"
-              />
-              <Button
-                onClick={handleSendMessage}
-                className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
             </div>
-          </div>
         </div>
-      )}
-    </>
-  );
-};
+        
+        <h1>Bläz VIP Booth Experience</h1>
+        
+        <p class="instruction-main">
+            Click the chat icon in the <span class="highlight-gradient">bottom right corner</span> to request a booth for an upcoming <span class="highlight-gradient">Bläz Entertainment</span> event!
+        </p>
+        
+        <div class="divider"></div>
+        <p class="tagline-bottom">The ultimate nightlife experience awaits you</p>
+    </div>
 
-export default ChatWidget;
+    <df-messenger
+        project-id="blaz-request-booth"
+        agent-id="ad471477-3a50-4b3f-9d3a-3b52bf715469"
+        language-code="en"
+        max-query-length="-1">
+        <df-messenger-chat-bubble
+            chat-title="Bläz booth agent">
+        </df-messenger-chat-bubble>
+    </df-messenger>
+
+    <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const dfMessenger = document.querySelector('df-messenger');
+
+      if (dfMessenger) {
+        dfMessenger.addEventListener('df-messenger-loaded', () => {
+          console.log('df-messenger-loaded event fired. Messenger is ready.');
+          let welcomeAttemptedOnOpen = false;
+
+          dfMessenger.addEventListener('df-messenger-chat-opened', () => {
+            console.log('df-messenger-chat-opened event fired.');
+            if (!welcomeAttemptedOnOpen) {
+              console.log('Chat opened by user. Attempting to send WELCOME event.');
+              
+              try {
+                // Using sendRequest to send an event to Dialogflow (ES or CX)
+                // Ensure your agent (ES or CX) is configured to handle an event named "WELCOME"
+                // and respond with your desired welcome messages.
+                dfMessenger.sendRequest('event', 'WELCOME')
+                  .then(() => {
+                    console.log("dfMessenger.sendRequest('event', 'WELCOME') successfully called.");
+                  })
+                  .catch((error) => {
+                    console.error("Error from dfMessenger.sendRequest('event', 'WELCOME'):", error);
+                  });
+                welcomeAttemptedOnOpen = true; 
+              } catch (syncError) {
+                // This catch block is for synchronous errors if sendRequest itself throws one immediately.
+                console.error('Synchronous error calling dfMessenger.sendRequest:', syncError);
+                welcomeAttemptedOnOpen = true; // Prevent retries on sync error
+              }
+            } else {
+              console.log('Chat re-opened by user, welcome event already attempted for this session load.');
+            }
+          });
+        });
+
+        // Optional: Listen for other events for debugging if needed
+        dfMessenger.addEventListener('df-event', (event) => {
+          console.log('df-event received:', event.detail);
+        });
+        dfMessenger.addEventListener('df-response-received', (event) => {
+          console.log('df-response-received:', event.detail);
+        });
+        dfMessenger.addEventListener('df-error', (event) => {
+          console.error('df-error event:', event.detail);
+        });
+
+      } else {
+        console.error('df-messenger element not found in the DOM.');
+      }
+    });
+    </script>
+</body>
+</html>
