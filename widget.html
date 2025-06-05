@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
 <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
 <df-messenger
   project-id="blaz-request-booth"
   agent-id="cc865bb5-401d-45db-a871-e7033729b455"
@@ -9,6 +10,7 @@
     chat-title="blaz-request-booth-v2">
   </df-messenger-chat-bubble>
 </df-messenger>
+
 <style>
   df-messenger {
     z-index: 999;
@@ -22,3 +24,13 @@
     right: 16px;
   }
 </style>
+
+<script>
+  window.addEventListener('dfMessengerLoaded', () => {
+    const dfMessenger = document.querySelector('df-messenger');
+    if (dfMessenger) {
+      // Send 'hi' on load to trigger welcome intent automatically
+      dfMessenger.send('hi');
+    }
+  });
+</script>
