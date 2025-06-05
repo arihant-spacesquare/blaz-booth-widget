@@ -1,36 +1,50 @@
-<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
-<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
-
-<df-messenger
-  project-id="blaz-request-booth"
-  agent-id="cc865bb5-401d-45db-a871-e7033729b455"
-  language-code="en"
-  max-query-length="-1">
-  <df-messenger-chat-bubble
-    chat-title="blaz-request-booth-v2">
-  </df-messenger-chat-bubble>
-</df-messenger>
-
-<style>
-  df-messenger {
-    z-index: 999;
-    position: fixed;
-    --df-messenger-font-color: #000;
-    --df-messenger-font-family: Google Sans;
-    --df-messenger-chat-background: #f3f6fc;
-    --df-messenger-message-user-background: #d3e3fd;
-    --df-messenger-message-bot-background: #fff;
-    bottom: 16px;
-    right: 16px;
-  }
-</style>
-
-<script>
-  window.addEventListener('dfMessengerLoaded', () => {
-    const dfMessenger = document.querySelector('df-messenger');
-    if (dfMessenger) {
-      // Send 'hi' on load to trigger welcome intent automatically
-      dfMessenger.send('hi');
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Your Chatbot Page</title>
+  <link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+  <script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+  <style>
+    df-messenger {
+      z-index: 999;
+      position: fixed;
+      --df-messenger-font-color: #000;
+      --df-messenger-font-family: Google Sans;
+      --df-messenger-chat-background: #f3f6fc;
+      --df-messenger-message-user-background: #d3e3fd;
+      --df-messenger-message-bot-background: #fff;
+      bottom: 16px;
+      right: 16px;
     }
-  });
-</script>
+  </style>
+</head>
+<body>
+
+  <df-messenger
+    project-id="blaz-request-booth"
+    agent-id="cc865bb5-401d-45db-a871-e7033729b455"
+    language-code="en"
+    max-query-length="-1">
+    <df-messenger-chat-bubble
+      chat-title="blaz-request-booth-v2">
+    </df-messenger-chat-bubble>
+  </df-messenger>
+
+  <script>
+    // Wait for the df-messenger component to be fully loaded
+    window.addEventListener('dfMessengerLoaded', function () {
+      const dfMessenger = document.querySelector('df-messenger');
+      if (dfMessenger) {
+        // Send the special 'WELCOME' event to Dialogflow CX
+        dfMessenger.renderCustomText('WELCOME');
+
+        // OPTIONAL: Automatically open the chat widget on load
+        // dfMessenger.setAttribute('expand', 'true'); 
+      } else {
+        console.error("df-messenger element not found!");
+      }
+    });
+  </script>
+
+</body>
+</html>
