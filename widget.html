@@ -35,13 +35,19 @@
     window.addEventListener('dfMessengerLoaded', function () {
       const dfMessenger = document.querySelector('df-messenger');
       if (dfMessenger) {
-        // Send the special 'WELCOME' event to Dialogflow CX
-        dfMessenger.renderCustomText('WELCOME');
+        // Explicitly send the 'WELCOME' event using sendRequest
+        dfMessenger.sendRequest('event', 'WELCOME')
+          .then(() => {
+            console.log("WELCOME event sent successfully.");
+          })
+          .catch(error => {
+            console.error("Error sending WELCOME event:", error);
+          });
 
         // OPTIONAL: Automatically open the chat widget on load
         // dfMessenger.setAttribute('expand', 'true'); 
       } else {
-        console.error("df-messenger element not found!");
+        console.error("df-messenger element not found in the DOM!");
       }
     });
   </script>
