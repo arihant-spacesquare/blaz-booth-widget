@@ -1,8 +1,44 @@
-<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<link rel="stylesheet" href="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/themes/df-messenger-default.css">
+<script src="https://www.gstatic.com/dialogflow-console/fast/df-messenger/prod/v1/df-messenger.js"></script>
+
 <df-messenger
-  intent="WELCOME"
-  chat-title="NewAgent"
-  agent-id="e76c53ae-355e-4a53-a2da-7fc4ecece539"
+  project-id="blaz-request-booth"
+  agent-id="6ca0c8eb-d7db-4090-88e6-70dd1d3b266c"
   language-code="en"
-></df-messenger>
- 
+  max-query-length="-1"
+  wait-open="true" >
+  <df-messenger-chat-bubble
+    chat-title="Reserve-with-Bläz">
+  </df-messenger-chat-bubble>
+</df-messenger>
+
+<style>
+  df-messenger {
+    z-index: 999;
+    position: fixed;
+    --df-messenger-font-color: #000;
+    --df-messenger-font-family: Google Sans;
+    --df-messenger-chat-background: #f3f6fc;
+    --df-messenger-message-user-background: #d3e3fd;
+    --df-messenger-message-bot-background: #fff;
+    bottom: 16px;
+    right: 16px;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const dfMessenger = document.querySelector('df-messenger');
+
+    // Ensure the dfMessenger element is loaded before adding the event listener
+    if (dfMessenger) {
+      dfMessenger.addEventListener('onchatopen', () => {
+        console.log('Dialogflow Messenger chat opened!'); // Optional: for debugging
+        // Trigger the custom event you configured in Dialogflow CX
+        dfMessenger.renderCustomText('WELCOME_WIDGET_OPEN');
+      });
+    } else {
+      console.error('df-messenger element not found.'); // Optional: for debugging
+    }
+  });
+</script>
